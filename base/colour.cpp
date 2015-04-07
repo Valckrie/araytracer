@@ -43,3 +43,15 @@ float Colour::getAlpha(void)
 {
   return alpha;
 }
+
+void Colour::add(Colour c) {
+  red += c.red;
+  green += c.green;
+  blue += c.blue;
+}
+
+Colour Colour::divide(float scalar) {
+  red = red / scalar;
+  green = green / scalar;
+  blue = blue / scalar;
+}

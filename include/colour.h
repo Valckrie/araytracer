@@ -14,6 +14,9 @@ public:
   float getGreen(void);
   float getBlue(void);
   float getAlpha(void);
+
+  void add(Colour c);
+  Colour divide(float scalar);
 };
 
 #endif
