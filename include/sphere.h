@@ -4,13 +4,14 @@
 #include "include/object.h"
 
 class Sphere: public Object {
-  Vertex centre;
-  float  radius;
- public:
-  Sphere(Vertex &c, float r);
-  Vertex getCentre();
-  float getRad();
-  bool intersect(Ray &ray, Hit *h);
+	Vertex centre;
+	float  radius;
+	
+	public:
+		Sphere(Vertex &c, float r);
+		Vertex getCentre();
+		float getRad();
+		bool intersect(Ray &ray, Hit *h);
 };
 
 #endif

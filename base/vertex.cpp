@@ -35,4 +35,4 @@ void Vertex::set(Vertex v)
 
 Vector Vertex::subtract (Vertex v) {
     return Vector(x - v.x, y - v.y, z - v.z);
-  }
+}

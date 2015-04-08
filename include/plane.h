@@ -5,10 +5,10 @@
 
 class Plane: public Object {
 	public:
-		Vector normal;
 		Vertex point;
+		Vector normal;
 		Plane(void);
-		Plane(Vector &n, Vertex p);
+		Plane(Vertex p, Vector &n);
 		Vector getNormal();
 		Vertex getPoint();
 		bool intersect(Ray &ray, Hit *h);

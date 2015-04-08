@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include <iostream>
 #include <time.h>
+#include <math.h>
 
 #include "include/scene.h"
 #include "include/sphere.h"
 #include "include/directional_light.h"
 #include "include/camera.h"
+#include "include/plane.h"
 
 using namespace std;
 
@@ -70,17 +72,13 @@ void clear_framebuffer()
 
 
 //
-void addSphere(Scene *scene, Vertex &centre, float &rad) {
+void addSphere(Scene *scene, Vertex &centre, float &rad, double R, double G, double B) {
 
     Sphere *s;
     Material *m;
     Vertex p;
     double ca, cr, cg, cb;
 
-    // position
-    // p.set(frand()-0.5,frand()-0.5,frand()+1.0,1.0);
-    // create with random radius
-    // s = new Sphere(p, frand()/2.0);
     s = new Sphere(centre, rad);
 
     cout << "x " << centre.x << " y " << centre.y << " z " << centre.z << " w " << centre.w;
@@ -91,14 +89,16 @@ void addSphere(Scene *scene, Vertex &centre, float &rad) {
     // create new material with shared random Ka and Kd
     m = new Material();
 
-    cr = frand(); cg = frand(); cb = frand(); ca = frand();
+    // cr = frand(); cg = frand(); cb = frand(); ca = frand();
 
-    m->ka.red = cr * 0.1;
-    m->ka.green = cg * 0.1;
-    m->ka.blue = cb * 0.1;
-    m->kd.red = cr * 0.5;
-    m->kd.green = cg * 0.5;
-    m->kd.blue = cb * 0.5;
+    // cout << "red " << cr << " green " << cg << " blue " << cb << "\n";
+
+    m->ka.red = R;
+    m->ka.green = G;
+    m->ka.blue = B;
+    m->kd.red = R;
+    m->kd.green = G;
+    m->kd.blue = B;
     m->kr.red =  0.0;
     m->kr.green = 0.0;
     m->kr.blue = 0.0;
@@ -118,9 +118,6 @@ void addSphere(Scene *scene, Vertex &centre, float &rad) {
 
 }
 
-
-
-
 // The main raytacing entry point.
 
 int main(int argc, const char *argv[])
@@ -133,6 +130,9 @@ int main(int argc, const char *argv[])
     Colour cl;
     Vertex pp;
     double ca, cr, cg,cb;
+    int samplesize = 16;
+    int ss = (int)sqrt( (float)samplesize);
+    Vertex samplepixel;
 
     // srand(30115);
     srand(time(NULL));
@@ -164,58 +164,89 @@ int main(int argc, const char *argv[])
     Vertex sphere_location_3(-0.25, -0.25, -0.5, 1);
     float sphere_radius_3 = 0.25;
 
-    addSphere(scene, sphere_location_1, sphere_radius_1);
-    addSphere(scene, sphere_location_2, sphere_radius_2);
-    addSphere(scene, sphere_location_3, sphere_radius_3);
+    addSphere(scene, sphere_location_1, sphere_radius_1, 0.3, 0.3, 0.3);
+    addSphere(scene, sphere_location_2, sphere_radius_2, 0.3, 0.7, 0.3);
+    addSphere(scene, sphere_location_3, sphere_radius_3, 0.8, 0.2, 0.2);
+
+    Material *grayMaterial = new Material();
+
+    Sphere *sz;
+    Vertex cz(-0.25, -0.25, -0.75, 1);
+    float rz = 0.10;
+    sz = new Sphere(cz, rz);
+    sz->setMaterial(grayMaterial);
+    scene->addObject(*sz);
+
+    Plane *ground;
+    Vertex ground_point(0, -5, 0, 1);
+    Vector ground_normal(0, 1, 0);
+    ground = new Plane(ground_point, ground_normal);
+    ground->setMaterial(grayMaterial);
+    scene->addObject(*ground);
+
 
     // for (int i = 0; i < 10; i++) {
     //     addSphere(scene, p1, rad1);
     // }
 
-
-
     Camera* cam = new Camera();
-    // cam->set_eye(300,400,500,1);
-    // cam->set_eye(1, 1, -2, 1);
-    // cam->set_lookat(5, 5, -1000, 1);
-    cam->set_eye(0, 0, -5, 1);
+    cam->set_eye(0, 0, -2, 1);
     cam->set_lookat(0, 0, 0, 1);
     cam->compute_uvw();
 
-
     // RAYTRACE SCENE
 
-    for(y = 0; y < YSIZE; y++) {
-        for(x = 0; x < XSIZE; x++) {
+    cout << "Sample size " << samplesize << "\n";
+    cout << "Sqrt Ss " << ss << "\n";
 
-            Ray ray;
-            float d;
+    for(y = 0; y < YSIZE; y++) {                    // up main
+        for(x = 0; x < XSIZE; x++) {                // across main
 
-            // Calculate a primary ray
-            // d = 0.5;
-            // ray.P.set(0.0,0.0,0.0,1.0);
-            // ray.D.set((((float)x)/XSIZE)-0.5, (((float)y)/XSIZE)-0.5, d);
+            Colour total;
+            Colour avg;
+            Colour sample;
+
+            for(int i = 0; i < ss; i++) {           // up sample
+                for(int j = 0; j < ss; j++) {       // across sample
+
+                    samplepixel.x = (float)x - 0.5 * XSIZE + (j + 0.5) / ss;
+                    samplepixel.x = (samplepixel.x / XSIZE);
+                    samplepixel.y = (float)y - 0.5 * YSIZE + (i + 0.5) / ss;
+                    samplepixel.y = (samplepixel.y / YSIZE);
+                    // cout << "ss.x " << samplepixel.x;
+                    // cout << " ss.y " << samplepixel.y << "\n";
+
+                    Ray ray;
+
+                    ray.P.set(cam->eye);
+                    Vector ray_dir = cam->w.add(cam->u.multiply(samplepixel.x).add(cam->v.multiply(samplepixel.y)));
+                    ray.D.set(ray_dir);
+                    ray.D.normalise();
+
+                    sample = scene->raytrace(ray,6);
+                    total.add(sample);
+                }
+            }
+
+            avg = total.divide(samplesize);
+            
+            // Ray ray;
+            // double normalized_x = (((float)x)/XSIZE)-0.5;
+            // double normalized_y = (((float)y)/YSIZE)-0.5;
+            // cout << "norm x " << normalized_x;
+            // cout << " norm y " << normalized_y << "\n";
+            // Vector ray_dir = cam->w.add(cam->u.multiply(normalized_x).add(cam->v.multiply(normalized_y)));
+            // ray.P.set(cam->eye);
+            // ray.D.set(ray_dir);
             // ray.D.normalise();
-
-            // Vector image_point = normalized_x * cam->u + 
-            //                     normalized_y * cam->v + 
-            //                     cam->eye + cam->w;
-            // Vector ray_direction = image_point - cam->eye;
-
-            double normalized_x = (((float)x)/XSIZE)-0.5;
-            double normalized_y = (((float)y)/YSIZE)-0.5;
-            Vector ray_dir = cam->w.add(cam->u.multiply(normalized_x).add(cam->v.multiply(normalized_y)));
-            ray.P.set(cam->eye);
-            ray.D.set(ray_dir);
-            ray.D.normalise();
-
-            // Trace primary ray
-            Colour col = scene->raytrace(ray,6);
+            // avg = scene->raytrace(ray,6);
+            // avg.add(avg);
+            // avg = avg.divide(2);
 
             // Save result in frame buffer
-            frame_buffer[y][x].red = col.red;
-            frame_buffer[y][x].green = col.green;
-            frame_buffer[y][x].blue = col.blue;
+            frame_buffer[y][x].red = avg.red;
+            frame_buffer[y][x].green = avg.green;
+            frame_buffer[y][x].blue = avg.blue;
         }
     }
 
