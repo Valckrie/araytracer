@@ -205,14 +205,14 @@ int main(int argc, const char *argv[])
     scene->addObject(*eee);
 
     Instance *ee2 = new Instance(ellipse);
-    ee2->scale(1, 1.5, 1);
+    ee2->scale(2, 2, 2);
     ee2->rotate_y(0);
     ee2->translate(1.5, 0, 0);
     scene->addObject(*ee2);
 
     Instance *ee3 = new Instance(ellipse);
     ee3->scale(1, 1.5, 1);
-    ee3->rotate_y(0);
+    ee3->rotate_x(-45);
     ee3->translate(-1.5, 0, 0);
     scene->addObject(*ee3);
 

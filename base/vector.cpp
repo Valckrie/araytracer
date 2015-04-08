@@ -75,8 +75,9 @@ Vector operator* (const Matrix& mat, const Vector& v) {
                     mat.m[2][0] * v.x + mat.m[2][1] * v.y + mat.m[2][2] * v.z));
 }
 
-Vector Vector::normalMatrixCalc(const Matrix& mat, const Vector& v) {
-    return (Vector( mat.m[0][0] * v.x + mat.m[1][0] * v.y + mat.m[2][0] * v.z,
-                    mat.m[0][1] * v.x + mat.m[1][1] * v.y + mat.m[2][1] * v.z,
-                    mat.m[0][2] * v.x + mat.m[1][2] * v.y + mat.m[2][2] * v.z));
+void Vector::normalMatrixCalc(const Matrix& mat) {
+    double tx = mat.m[0][0] * x + mat.m[1][0] * y + mat.m[2][0] * z;
+    double ty = mat.m[0][1] * x + mat.m[1][1] * y + mat.m[2][1] * z;
+    double tz = mat.m[0][2] * x + mat.m[1][2] * y + mat.m[2][2] * z;
+    x = tx; y = ty; z = tz;
 }

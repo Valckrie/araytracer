@@ -22,11 +22,10 @@ class Vector {
 	Vector add(Vector v);
 	Vector negative();
 
-	void normalMatrixCalc (const Matrix& mat, const Vector& v);
+	void normalMatrixCalc (const Matrix& mat);
 
 };
 
 Vector operator* (const Matrix& mat, const Vector& v);
-
 
 #endif

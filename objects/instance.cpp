@@ -124,7 +124,8 @@ Instance::intersect(Ray& ray, Hit *hit) {
 	if (object_ptr->intersect(inv_ray, hit)) {
 
         // hit->n = inv_matrix * hit->n;
-        hit->n = hit->n.normalMatrixCalc(inv_matrix, hit->n);
+        // hit->n = hit->n.normalMatrixCalc(inv_matrix, hit->n);
+        hit->n.normalMatrixCalc(inv_matrix);
         hit->n.normalise();
 
 		// sr.normal = inv_matrix * sr.normal;
