@@ -123,7 +123,8 @@ Instance::intersect(Ray& ray, Hit *hit) {
 				
 	if (object_ptr->intersect(inv_ray, hit)) {
 
-        hit->n = inv_matrix * hit->n;
+        // hit->n = inv_matrix * hit->n;
+        hit->n = hit->n.normalMatrixCalc(inv_matrix, hit->n);
         hit->n.normalise();
 
 		// sr.normal = inv_matrix * sr.normal;
@@ -133,6 +134,7 @@ Instance::intersect(Ray& ray, Hit *hit) {
 			obj_mat = object_ptr->getMaterial(); 
 			
 		// if (!transform_the_texture) 
+
             hit->p.x = ray.P.x  + hit->t * ray.D.x;
             hit->p.y = ray.P.y  + hit->t * ray.D.y;
             hit->p.z = ray.P.z  + hit->t * ray.D.z;

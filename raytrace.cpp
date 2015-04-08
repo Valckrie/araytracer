@@ -146,7 +146,7 @@ int main(int argc, const char *argv[])
     scene = new Scene();
 
     // Create and add a directional light to the scene
-    v.set(-1.0,-1.0,1.0);
+    v.set(-1.0, -1.0, 0.0);
     cl.set(1.0,1.0,1.0,1.0);
     pp.set(-50.0, 50.0, -48.25, 1.0);
 
@@ -198,10 +198,24 @@ int main(int argc, const char *argv[])
     ellipse->setMaterial(grayMaterial);
 
     Instance *eee = new Instance(ellipse);
-    eee->scale(1, 2, 1);
-    eee->rotate_x(-45);
+    eee->scale(1, 1.5, 1);
+    // eee->rotate_x(-45);
+    eee->rotate_y(90);
     eee->translate(0, 0, 0);
     scene->addObject(*eee);
+
+    Instance *ee2 = new Instance(ellipse);
+    ee2->scale(1, 1.5, 1);
+    ee2->rotate_y(0);
+    ee2->translate(1.5, 0, 0);
+    scene->addObject(*ee2);
+
+    Instance *ee3 = new Instance(ellipse);
+    ee3->scale(1, 1.5, 1);
+    ee3->rotate_y(0);
+    ee3->translate(-1.5, 0, 0);
+    scene->addObject(*ee3);
+
 
     // Instance* ellipse = new Instance(new Sphere(ellipse_c, ellipse_r));
     // ellipse->set_material(grayMaterial);

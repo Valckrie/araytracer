@@ -21,8 +21,12 @@ class Vector {
 	Vector multiply (double scalar);
 	Vector add(Vector v);
 	Vector negative();
+
+	void normalMatrixCalc (const Matrix& mat, const Vector& v);
+
 };
 
 Vector operator* (const Matrix& mat, const Vector& v);
+
 
 #endif
