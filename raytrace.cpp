@@ -157,11 +157,11 @@ int main(int argc, const char *argv[])
     Vertex sphere_location_1(0, 0, 0, 1);
     float sphere_radius_1 = 0.50;
     // in front
-    Vertex sphere_location_2(0.25, 0.25, -0.5, 1);
+    Vertex sphere_location_2(0.3, 0.3, 0, 1);
     float sphere_radius_2 = 0.25;
 
     // in front
-    Vertex sphere_location_3(-0.25, -0.25, -0.5, 1);
+    Vertex sphere_location_3(-0.3, -0.3, 0, 1);
     float sphere_radius_3 = 0.25;
 
     addSphere(scene, sphere_location_1, sphere_radius_1, 0.3, 0.3, 0.3);
@@ -184,13 +184,26 @@ int main(int argc, const char *argv[])
     ground->setMaterial(grayMaterial);
     scene->addObject(*ground);
 
+    Plane *wall;
+    Vertex wall_point(5, 0, 0, 1);
+    Vector wall_normal(-1, 0, 0);
+    wall = new Plane(wall_point, wall_normal);
+    wall->setMaterial(grayMaterial);
+    scene->addObject(*wall);
+
+    // Plane *wall2;
+    // Vertex wall2_point(-5, 0, 0, 1);
+    // Vector wall2_normal(1, 0, 0);
+    // wall2 = new Plane(wall2_point, wall2_normal);
+    // wall2->setMaterial(grayMaterial);
+    // scene->addObject(*wall2);
 
     // for (int i = 0; i < 10; i++) {
     //     addSphere(scene, p1, rad1);
     // }
 
     Camera* cam = new Camera();
-    cam->set_eye(0, 0, -2, 1);
+    cam->set_eye(0, 0, -4, 1);
     cam->set_lookat(0, 0, 0, 1);
     cam->compute_uvw();
 

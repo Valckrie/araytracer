@@ -9,16 +9,18 @@
 #include "include/material.h"
 
 class Object {
-  Object *obj_next;
- public:
-  Material *obj_mat;
-  Object(void);
-  void link(Object *obj);
-  Object *next(void);
-  void setMaterial(Material *m);
-  Colour getColour();
-  virtual bool intersect(Ray &ray, Hit *h) { return false; }
-  virtual bool sintersect(Ray &ray, Hit *h, double tl);
+	Object *obj_next;
+	public:
+	Material *obj_mat;
+
+	Object(void);
+	void link(Object *obj);
+	Object *next(void);
+	void setMaterial(Material *m);
+	Colour getColour();
+	
+	virtual bool intersect(Ray &ray, Hit *h) { return false; }
+	virtual bool sintersect(Ray &ray, Hit *h, double tl);
 };
 
 #endif
