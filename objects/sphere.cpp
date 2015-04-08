@@ -1,9 +1,10 @@
 // Sphere object
+#include <iostream>
 
 #include <math.h>
 
 #include "include/sphere.h"
-
+using namespace std;
 // Sphere defined as vertex (in world space) and radius
 
 Sphere::Sphere(Vertex &c, float r)
@@ -24,6 +25,7 @@ float Sphere::getRad() {
 
 bool Sphere::intersect(Ray &ray, Hit *hit)
 {
+    // cout << "SPHERE INTERSECTING" << "\n";
     Vector ro;
 
     // offset ray by sphere position

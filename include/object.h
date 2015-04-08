@@ -1,6 +1,8 @@
 #ifndef _OBJECT_H_
 #define _OBJECT_H_
 
+#include <math.h>
+
 #include "include/vertex.h"
 #include "include/vector.h"
 #include "include/colour.h"
@@ -17,8 +19,10 @@ class Object {
 	void link(Object *obj);
 	Object *next(void);
 	void setMaterial(Material *m);
+	Material* getMaterial(void);
+
 	Colour getColour();
-	
+
 	virtual bool intersect(Ray &ray, Hit *h) { return false; }
 	virtual bool sintersect(Ray &ray, Hit *h, double tl);
 };

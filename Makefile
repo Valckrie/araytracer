@@ -1,4 +1,4 @@
-OBJS = raytrace.o base/scene.o base/vector.o base/vertex.o base/colour.o objects/object.o objects/sphere.o base/material.o base/ray.o lights/light.o lights/directional_light.o base/hit.o base/camera.o objects/plane.o base/matrix.o
+OBJS = raytrace.o base/scene.o base/vector.o base/vertex.o base/colour.o objects/object.o objects/sphere.o base/material.o base/ray.o lights/light.o lights/directional_light.o base/hit.o base/camera.o objects/plane.o base/matrix.o objects/instance.o
 
 raytrace: $(OBJS) 
 	g++ -o raytrace $(OBJS) -lm
@@ -6,7 +6,7 @@ raytrace: $(OBJS)
 .cpp.o:
 	g++ -c -O -I. $< -o $@
 
-raytrace.o: include/scene.h include/sphere.h include/plane.h include/directional_light.h include/spot_light.h include/camera.h
+raytrace.o: include/scene.h include/sphere.h include/plane.h include/directional_light.h include/spot_light.h include/camera.h include/instance.h
 
 base/scene.o: include/scene.h
 
@@ -31,6 +31,8 @@ objects/object.o: include/object.h
 objects/sphere.o: include/sphere.h
 
 objects/plane.o: include/plane.h
+
+objects/instance.o: include/instance.h
 
 lights/light.o: include/light.h
 
@@ -63,8 +65,14 @@ include/sphere.h: include/object.h
 include/camera.h: include/vector.h include/vertex.h
 	touch include/camera.h
 	
-include/vertex.h: include/vector.h
+include/vertex.h: include/vector.h include/matrix.h
 	touch include/vertex.h
+
+include/vector.h: include/matrix.h
+	touch include/vector.h
 	
 include/plane.h: include/object.h
 	touch include/plane.h
+	
+include/instance.h: include/object.h include/matrix.h
+	touch include/instance.h

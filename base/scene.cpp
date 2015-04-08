@@ -23,102 +23,95 @@ void Scene::addLight(Light &lt)
   light_list = &lt;
 }
 
-Colour Scene::raytrace(Ray &ray, int level)
-{
-  float ta,t;
-  Colour col;
-  Object *obj;
-  Object *closest;
-  Light *lt;
-  Hit   hit;
-  Vertex position;
-  Vector normal;
+Colour Scene::raytrace(Ray &ray, int level) {
+    float ta, t;
+    Colour col;
 
+    Object *obj;
+    Object *closest;
 
-  if (level == 0)
-  {
+    Light *lt;
+    Hit   hit;
+
+    Vertex position;
+    Vector normal;
+
+    if (level == 0) {
+        col.clear();
+        return col; // stop if recursed deep enough
+    }
+
+    // TEST EACH OBJECT AGAINST RAY, FIND THE CLOSEST
+
+    t = 1000000000.0; // a long way aways
+    closest = (Object *)0;
+    obj = obj_list;
+
+    while (obj != (Object *)0) {
+        if(obj->intersect(ray, &hit) == true) {
+            if (hit.t < t) {
+                closest = hit.obj;
+                // t = min parameter t, 
+                t = hit.t;
+                normal = hit.n;
+                position = hit.p;
+            }
+        }
+        obj = obj->next();
+    }
+
     col.clear();
-    return col; // stop if recursed deep enough
-  }
 
-  // TEST EACH OBJECT AGAINST RAY, FIND THE CLOSEST
+    if (closest != (Object *)0) {
+        lt = light_list;
 
-  t = 1000000000.0; // a long way aways
-  closest = (Object *)0;
-  obj = obj_list;
+        Colour ocol;
 
-  while (obj != (Object *)0)
-  {
-    if(obj->intersect(ray, &hit) == true)
-    {
-      if (hit.t < t)
-      {
-	closest = hit.obj;
-	t = hit.t;
-	normal = hit.n;
-	position = hit.p;
-      }
-    }
-
-    obj = obj->next();
-  }
-
-  col.clear();
-
-  if (closest != (Object *)0)
-  {
-    lt = light_list;
-
-    Colour ocol;
-
-    Colour ka = closest->obj_mat->ka;
-    Colour kd = closest->obj_mat->kd;
-    Colour ks = closest->obj_mat->ks;
-    Colour kr = closest->obj_mat->kr;
-    Colour kt = closest->obj_mat->kt;
-    Ray sray;
+        Colour ka = closest->obj_mat->ka;
+        Colour kd = closest->obj_mat->kd;
+        Colour ks = closest->obj_mat->ks;
+        Colour kr = closest->obj_mat->kr;
+        Colour kt = closest->obj_mat->kt;
+        Ray sray;
 
 
-    while (lt != (Light *)0)
-    {
-      Vector ldir;
-      Vector xldir;
-      Colour lcol;
+        while (lt != (Light *)0) {
+            Vector ldir;
+            Vector xldir;
+            Colour lcol;
 
-      // add shadow test here
+            // add shadow test here
 
-      // calculate diffuse component
+            // calculate diffuse component
 
-      lt->getLightProperties(position, &xldir, &lcol);
+            lt->getLightProperties(position, &xldir, &lcol);
 
-      xldir.normalise();
+            xldir.normalise();
 
-      float dlc = xldir.dot(normal);
+            float dlc = xldir.dot(normal);
 
-      if (dlc < 0.0)
-      {
-	dlc = 0.0;
-      }
+            if (dlc < 0.0) {
+                dlc = 0.0;
+            }
 
-      // calculate specular component here
+            // calculate specular component here
 
-      float slc = 0.0;
+            float slc = 0.0;
 
-      // combine components
+            // combine components
 
-      col.red += ka.red + lcol.red*(dlc * kd.red + slc * ks.red);
-      col.green += ka.green + lcol.green*(dlc * kd.green + slc * ks.green);
-      col.blue += ka.blue + lcol.blue*(dlc * kd.blue + slc * ks.blue);
+            col.red += ka.red + lcol.red*(dlc * kd.red + slc * ks.red);
+            col.green += ka.green + lcol.green*(dlc * kd.green + slc * ks.green);
+            col.blue += ka.blue + lcol.blue*(dlc * kd.blue + slc * ks.blue);
 
-      lt = lt->next(); // next light
-    }
+            lt = lt->next(); // next light
+        }
 
     // add reflected rays here
 
     // add refracted rays here
-  }
-
-  return col;
+    }
+    return col;
 }
 
 

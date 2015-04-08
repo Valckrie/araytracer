@@ -1,3 +1,4 @@
+#include <math.h>
 #include "include/vertex.h"
 
 Vertex::Vertex()
@@ -35,4 +36,11 @@ void Vertex::set(Vertex v)
 
 Vector Vertex::subtract (Vertex v) {
     return Vector(x - v.x, y - v.y, z - v.z);
+}
+
+Vertex operator* (const Matrix& mat, const Vertex& p) {
+	return (Vertex(mat.m[0][0] * p.x + mat.m[0][1] * p.y + mat.m[0][2] * p.z + mat.m[0][3],
+					mat.m[1][0] * p.x + mat.m[1][1] * p.y + mat.m[1][2] * p.z + mat.m[1][3],
+					mat.m[2][0] * p.x + mat.m[2][1] * p.y + mat.m[2][2] * p.z + mat.m[2][3],
+					1.0));
 }

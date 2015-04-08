@@ -1,6 +1,8 @@
 #ifndef _VECTOR_H_
 #define _VECTOR_H_
 
+#include "include/matrix.h"
+
 class Vector {
 	public:
 	double x;
@@ -21,6 +23,6 @@ class Vector {
 	Vector negative();
 };
 
-
+Vector operator* (const Matrix& mat, const Vector& v);
 
 #endif

@@ -9,6 +9,7 @@
 #include "include/directional_light.h"
 #include "include/camera.h"
 #include "include/plane.h"
+#include "include/instance.h"
 
 using namespace std;
 
@@ -164,7 +165,7 @@ int main(int argc, const char *argv[])
     Vertex sphere_location_3(-0.3, -0.3, 0, 1);
     float sphere_radius_3 = 0.25;
 
-    addSphere(scene, sphere_location_1, sphere_radius_1, 0.3, 0.3, 0.3);
+    // addSphere(scene, sphere_location_1, sphere_radius_1, 0.3, 0.3, 0.3);
     addSphere(scene, sphere_location_2, sphere_radius_2, 0.3, 0.7, 0.3);
     addSphere(scene, sphere_location_3, sphere_radius_3, 0.8, 0.2, 0.2);
 
@@ -189,7 +190,27 @@ int main(int argc, const char *argv[])
     Vector wall_normal(-1, 0, 0);
     wall = new Plane(wall_point, wall_normal);
     wall->setMaterial(grayMaterial);
-    scene->addObject(*wall);
+    // scene->addObject(*wall);
+
+    Vertex ellipse_c (0, 0, 0, 1);
+    float ellipse_r = 0.5;
+    Sphere* ellipse = new Sphere(ellipse_c, ellipse_r);
+    ellipse->setMaterial(grayMaterial);
+
+    Instance *eee = new Instance(ellipse);
+    eee->scale(1, 2, 1);
+    eee->rotate_x(-45);
+    eee->translate(0, 0, 0);
+    scene->addObject(*eee);
+
+    // Instance* ellipse = new Instance(new Sphere(ellipse_c, ellipse_r));
+    // ellipse->set_material(grayMaterial);
+    // ellipse->scale(2, 3, 1);
+    // ellipse->rotate_x(-45);
+    // ellipse->translate(0, 1, 0);
+    
+    // scene->addObject(*ellipse);
+
 
     // Plane *wall2;
     // Vertex wall2_point(-5, 0, 0, 1);

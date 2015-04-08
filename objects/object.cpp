@@ -3,6 +3,7 @@
 #include <math.h>
 
 #include "include/object.h"
+#include "include/material.h"
 
 Object::Object(void)
 {
@@ -21,6 +22,10 @@ Object *Object::next(void)
 void Object::setMaterial(Material *m)
 {
   obj_mat = m;
+}
+
+Material* Object::getMaterial(void) {
+  return (obj_mat);
 }
 
 

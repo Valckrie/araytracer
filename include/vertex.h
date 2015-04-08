@@ -2,6 +2,7 @@
 #define _VERTEX_H_
 
 #include "include/vector.h"
+#include "include/matrix.h"
 
 class Vertex {
 	public:
@@ -15,5 +16,7 @@ class Vertex {
 	void set(Vertex v);
 	Vector subtract (Vertex v);
 };
+
+Vertex operator* (const Matrix& mat, const Vertex& p);
 
 #endif
