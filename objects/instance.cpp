@@ -20,7 +20,7 @@ Instance::Instance(void) {
 // ----------------------------------------------------------------  constructor
 
 Instance::Instance(Object* obj_ptr) {
-    cout << "MADE INSTANCE" << "\n";
+    // cout << "MADE INSTANCE" << "\n";
     // Object();
     object_ptr = obj_ptr;
     // inv_matrix();
@@ -125,6 +125,8 @@ Instance::intersect(Ray& ray, Hit *hit) {
 
         // hit->n = inv_matrix * hit->n;
         // hit->n = hit->n.normalMatrixCalc(inv_matrix, hit->n);
+        hit->obj = this;
+        // dont know if need this? object pointer ref ^
         hit->n.normalMatrixCalc(inv_matrix);
         hit->n.normalise();
 

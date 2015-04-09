@@ -17,6 +17,13 @@ Vertex::Vertex(double px, double py, double pz, double pw)
   w = pw;
 }
 
+Vertex::Vertex(double px, double py, double pz)
+{
+  x = px;
+  y = py;
+  z = pz;
+  w = 1.0;
+}
 
 void Vertex::set(double px, double py, double pz, double pw)
 {

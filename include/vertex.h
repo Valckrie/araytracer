@@ -12,6 +12,7 @@ class Vertex {
 	double w;
 	Vertex(void);
 	Vertex(double x, double y, double z, double w);
+	Vertex(double x, double y, double z);
 	void set(double x, double y, double z, double w);
 	void set(Vertex v);
 	Vector subtract (Vertex v);

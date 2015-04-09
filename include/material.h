@@ -12,6 +12,7 @@ class Material {
 	Colour kt;
 	double n;
 	Material(void);
+	Material(double R, double G, double B);
 };
 
 #endif

@@ -10,6 +10,7 @@
 #include "include/camera.h"
 #include "include/plane.h"
 #include "include/instance.h"
+#include "include/triangle.h"
 
 using namespace std;
 
@@ -82,10 +83,10 @@ void addSphere(Scene *scene, Vertex &centre, float &rad, double R, double G, dou
 
     s = new Sphere(centre, rad);
 
-    cout << "x " << centre.x << " y " << centre.y << " z " << centre.z << " w " << centre.w;
-    cout << "\n";
-    cout << s->getRad();
-    cout << "\n";
+    // cout << "x " << centre.x << " y " << centre.y << " z " << centre.z << " w " << centre.w;
+    // cout << "\n";
+    // cout << s->getRad();
+    // cout << "\n";
 
     // create new material with shared random Ka and Kd
     m = new Material();
@@ -170,6 +171,7 @@ int main(int argc, const char *argv[])
     addSphere(scene, sphere_location_3, sphere_radius_3, 0.8, 0.2, 0.2);
 
     Material *grayMaterial = new Material();
+    Material *newMaterial = new Material(0.2, 0.8, 0.4);
 
     Sphere *sz;
     Vertex cz(-0.25, -0.25, -0.75, 1);
@@ -216,6 +218,13 @@ int main(int argc, const char *argv[])
     ee3->translate(-1.5, 0, 0);
     scene->addObject(*ee3);
 
+    Triangle *triangle1 = new Triangle(Vertex(-1, 1, 1), Vertex(0, 3, 1), Vertex(1, 1, 1));
+    triangle1->setMaterial(newMaterial);
+
+    Instance *tri1 = new Instance(triangle1);
+    tri1->rotate_z(45);
+    tri1->translate(0, 2, 0);
+    scene->addObject(*tri1);
 
     // Instance* ellipse = new Instance(new Sphere(ellipse_c, ellipse_r));
     // ellipse->set_material(grayMaterial);
@@ -238,7 +247,7 @@ int main(int argc, const char *argv[])
     // }
 
     Camera* cam = new Camera();
-    cam->set_eye(0, 0, -4, 1);
+    cam->set_eye(0, 0, -10, 1);
     cam->set_lookat(0, 0, 0, 1);
     cam->compute_uvw();
 
