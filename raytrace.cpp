@@ -162,6 +162,7 @@ int main(int argc, const char *argv[])
     PointLight *pt_light1 = new PointLight(point_light_pos, col_white);
     pt_light1->setLumScale(2.0);
     scene->addLight(*pt_light1);
+    
     // POINT LIGHT SPHERE MARKER
     float marker_radius = 0.5;
     addSphere(scene, point_light_pos, marker_radius, 1.0, 1.0, 1.0);

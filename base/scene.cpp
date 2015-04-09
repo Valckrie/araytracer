@@ -82,27 +82,56 @@ Colour Scene::raytrace(Ray &ray, int level) {
 
             // add shadow test here
 
-            // calculate diffuse component
+// == calculate diffuse component
 
             lt->getLightProperties(position, &xldir, &lcol);
-
             xldir.normalise();
-
             float dlc = xldir.dot(normal);
-
             if (dlc < 0.0) {
                 dlc = 0.0;
             }
 
-            // calculate specular component here
+// == calculate specular component here
+            // float slc = 0.0;
 
-            float slc = 0.0;
+            // ndotwi = dlc        // diffuse component
+            // wi = xldir          // light direction
+            // wo = xldir reversed // ray direction reversed 
 
-            // combine components
+            Vector wi = xldir;
+            Vector wo = ray.D.negative();
+            // float ndotwi = sr.normal * wi;
+            float ndotwi = wi.dot(normal);
 
-            col.red += ka.red + lcol.red*(dlc * kd.red + slc * ks.red);
-            col.green += ka.green + lcol.green*(dlc * kd.green + slc * ks.green);
-            col.blue += ka.blue + lcol.blue*(dlc * kd.blue + slc * ks.blue);
+            // mirror reflection direction
+            // Vector3D r(-wi + 2.0 * sr.normal * ndotwi);
+
+            // Vector r = wi.negative() + 2.0 * normal * ndotwi;
+                // --- vector = vector + vector <-2.0 multiply [vector]// vector mult float [returns vector];
+            Vector r = wi.negative().add(normal.multiply(ndotwi).multiply(2.0));
+            
+
+            // float rdotwo = r * wo;        
+            float rdotwo = r.dot(wo);
+            rdotwo = pow(rdotwo, 20);
+
+            // if (rdotwo > 0.0) {
+            //     L = ks * cs * pow(rdotwo, exp);
+            //     L = ks * cs * pow(rdotwo, 20);
+            // }
+
+            float slc = rdotwo;
+            if (slc < 0.0) {
+                slc = 0.0;
+            }
+
+
+
+// combine components
+
+            col.red     += ka.red   + lcol.red *    (dlc * kd.red   + slc * ks.red);
+            col.green   += ka.green + lcol.green *  (dlc * kd.green + slc * ks.green);
+            col.blue    += ka.blue  + lcol.blue *   (dlc * kd.blue  + slc * ks.blue);
 
             lt = lt->next(); // next light
         }
