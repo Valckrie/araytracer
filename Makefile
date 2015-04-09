@@ -1,4 +1,4 @@
-OBJS = raytrace.o base/scene.o base/vector.o base/vertex.o base/colour.o objects/object.o objects/sphere.o base/material.o base/ray.o lights/light.o lights/directional_light.o base/hit.o base/camera.o objects/plane.o base/matrix.o objects/instance.o objects/triangle.o
+OBJS = raytrace.o base/scene.o base/vector.o base/vertex.o base/colour.o objects/object.o objects/sphere.o base/material.o base/ray.o lights/light.o lights/directional_light.o base/hit.o base/camera.o objects/plane.o base/matrix.o objects/instance.o objects/triangle.o objects/opencylinder.o
 
 raytrace: $(OBJS) 
 	g++ -o raytrace $(OBJS) -lm
@@ -35,6 +35,8 @@ objects/plane.o: include/plane.h
 objects/instance.o: include/instance.h
 
 objects/triangle.o: include/triangle.h
+
+objects/opencylinder.o: include/opencylinder.h
 
 lights/light.o: include/light.h
 
@@ -78,6 +80,9 @@ include/plane.h: include/object.h
 	
 include/triangle.h: include/object.h
 	touch include/triangle.h
+
+include/opencylinder.h: include/object.h
+	touch include/opencylinder.h
 	
 include/instance.h: include/object.h include/matrix.h
 	touch include/instance.h
