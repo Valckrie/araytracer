@@ -147,36 +147,36 @@ int main(int argc, const char *argv[])
     Colour col_white;
     col_white.set(1.0,1.0,1.0,1.0);
 
+    Camera* cam = new Camera();
+    cam->set_eye(0, 20, -50, 1);
+    cam->set_lookat(0, 0, 0, 1);
+    cam->compute_uvw();
+
     // Create and add a directional light to the scene
     Vector dir_light_dir(-1.0, -1.0, 0.0);
     DirectionalLight *dir_light1 = new DirectionalLight(dir_light_dir, col_white);
     // scene->addLight(*dir_light1);
 
     // POINT LIGHT
-    Vertex point_light_pos (2, 2, 0, 1.0);
+    Vertex point_light_pos (15, 15, -7.5, 1.0);
     PointLight *pt_light1 = new PointLight(point_light_pos, col_white);
+    pt_light1->setLumScale(2.0);
     scene->addLight(*pt_light1);
     // POINT LIGHT SPHERE MARKER
-
-    float marker_radius = 0.1;
+    float marker_radius = 0.5;
     addSphere(scene, point_light_pos, marker_radius, 1.0, 1.0, 1.0);
     
-    // addSphere(scene, point_light_pos, marker_radius, 0.3, 0.7, 0.3);
-
-
-
     // origin
     Vertex sphere_location_1(0, 0, 0, 1);
-    float sphere_radius_1 = 0.50;
+    float sphere_radius_1 = 6;
     // in front
-    Vertex sphere_location_2(0.3, 0.3, 0, 1);
-    float sphere_radius_2 = 0.25;
-
+    Vertex sphere_location_2(4, 4, 0, 1);
+    float sphere_radius_2 = 3;
     // in front
-    Vertex sphere_location_3(-0.3, -0.3, 0, 1);
-    float sphere_radius_3 = 0.25;
+    Vertex sphere_location_3(-4, -4, 0, 1);
+    float sphere_radius_3 = 3;
 
-    // addSphere(scene, sphere_location_1, sphere_radius_1, 0.3, 0.3, 0.3);
+    addSphere(scene, sphere_location_1, sphere_radius_1, 0.3, 0.3, 0.3);
     addSphere(scene, sphere_location_2, sphere_radius_2, 0.3, 0.7, 0.3);
     addSphere(scene, sphere_location_3, sphere_radius_3, 0.8, 0.2, 0.2);
 
@@ -184,8 +184,8 @@ int main(int argc, const char *argv[])
     Material *newMaterial = new Material(0.2, 0.8, 0.4);
 
     Sphere *sz;
-    Vertex cz(-0.25, -0.25, -0.75, 1);
-    float rz = 0.10;
+    Vertex cz(-5, -5, -10, 1);
+    float rz = 2;
     sz = new Sphere(cz, rz);
     sz->setMaterial(grayMaterial);
     scene->addObject(*sz);
@@ -204,45 +204,32 @@ int main(int argc, const char *argv[])
     wall->setMaterial(grayMaterial);
     // scene->addObject(*wall);
 
-    Vertex ellipse_c (0, 0, 0, 1);
-    float ellipse_r = 0.5;
+    Vertex ellipse_c (-10, 0, 0, 1);
+    float ellipse_r = 5;
     Sphere* ellipse = new Sphere(ellipse_c, ellipse_r);
     ellipse->setMaterial(grayMaterial);
-
-    Instance *eee = new Instance(ellipse);
-    eee->scale(1, 1.5, 1);
-    // eee->rotate_x(-45);
-    eee->rotate_y(90);
-    eee->translate(0, 0, 0);
-    scene->addObject(*eee);
 
     Instance *ee2 = new Instance(ellipse);
     ee2->scale(2, 2, 2);
     ee2->rotate_y(0);
-    ee2->translate(1.5, 0, 0);
+    ee2->translate(0, 0, 0);
     scene->addObject(*ee2);
 
-    Instance *ee3 = new Instance(ellipse);
-    ee3->scale(1, 1.5, 1);
-    ee3->rotate_x(-45);
-    ee3->translate(-1.5, 0, 0);
-    scene->addObject(*ee3);
-
-    Triangle *triangle1 = new Triangle(Vertex(-1, 1, 1), Vertex(0, 3, 1), Vertex(1, 1, 1));
+    Triangle *triangle1 = new Triangle(Vertex(-5, 10, 1), Vertex(0, 15, 1), Vertex(5, 10, 1));
     triangle1->setMaterial(newMaterial);
 
     Instance *tri1 = new Instance(triangle1);
-    tri1->rotate_z(45);
-    tri1->translate(0, 2, 0);
+    tri1->rotate_z(0);
+    tri1->translate(0, 0, 0);
     scene->addObject(*tri1);
 
-    OpenCylinder *opencylinder1 = new OpenCylinder(-1,1,0.5);
+    OpenCylinder *opencylinder1 = new OpenCylinder(-10, 10, 5);
     opencylinder1->setMaterial(newMaterial);
 
     Instance *oc1 = new Instance(opencylinder1);
     oc1->rotate_z(-60);
     oc1->rotate_y(-60);
-    oc1->translate(-2, -2, -3);
+    oc1->translate(12, 0, 0);
     scene->addObject(*oc1);
 
     // Instance* ellipse = new Instance(new Sphere(ellipse_c, ellipse_r));
@@ -265,10 +252,7 @@ int main(int argc, const char *argv[])
     //     addSphere(scene, p1, rad1);
     // }
 
-    Camera* cam = new Camera();
-    cam->set_eye(0, 0, -10, 1);
-    cam->set_lookat(0, 0, 0, 1);
-    cam->compute_uvw();
+
 
     // RAYTRACE SCENE
 

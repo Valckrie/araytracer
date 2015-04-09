@@ -29,6 +29,11 @@ void PointLight::getLightProperties(Vertex &pos, Vector *ldir, Colour *i)
 
     // the intensity is always the same (not dependent on where it's going
     i->set(intensity.getRed(),intensity.getGreen(),intensity.getBlue(),intensity.getAlpha());
+    i->scaleLuminance(lum_scale);
+}
+
+void PointLight::setLumScale(float ls) {
+    lum_scale = ls;
 }
 
 

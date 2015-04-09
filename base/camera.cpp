@@ -24,9 +24,10 @@ Camera::Camera() {
 void
 Camera::compute_uvw(void) {
 	// eye position - lookAt
-	// w = eye.subtract(lookat);
-	w = lookat.subtract(eye);
+	w = eye.subtract(lookat);
+	// w = lookat.subtract(eye);
 	// diffbtw
+	w = w.negative();
 	w.normalise();
 	// w camdir, u camright, v camup
 	u = up.crossProduct(w); 

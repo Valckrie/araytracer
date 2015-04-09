@@ -17,6 +17,7 @@ public:
 
   void add(Colour c);
   Colour divide(float scalar);
+  void scaleLuminance(float scalar);
 };
 
 #endif
