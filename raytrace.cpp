@@ -7,10 +7,12 @@
 #include "include/scene.h"
 #include "include/sphere.h"
 #include "include/directional_light.h"
+#include "include/point_light.h"
 #include "include/camera.h"
 #include "include/plane.h"
 #include "include/instance.h"
 #include "include/triangle.h"
+#include "include/opencylinder.h"
 
 using namespace std;
 
@@ -125,13 +127,9 @@ void addSphere(Scene *scene, Vertex &centre, float &rad, double R, double G, dou
 int main(int argc, const char *argv[])
 {
     Scene *scene;
-    Vector v;
     int x,y;
-    int n;
-    DirectionalLight *dl;
-    Colour cl;
-    Vertex pp;
-    double ca, cr, cg,cb;
+    // int n;
+
     int samplesize = 16;
     int ss = (int)sqrt( (float)samplesize);
     Vertex samplepixel;
@@ -146,14 +144,26 @@ int main(int argc, const char *argv[])
     // Create a new scene to render
     scene = new Scene();
 
+    Colour col_white;
+    col_white.set(1.0,1.0,1.0,1.0);
+
     // Create and add a directional light to the scene
-    v.set(-1.0, -1.0, 0.0);
-    cl.set(1.0,1.0,1.0,1.0);
-    pp.set(-50.0, 50.0, -48.25, 1.0);
+    Vector dir_light_dir(-1.0, -1.0, 0.0);
+    DirectionalLight *dir_light1 = new DirectionalLight(dir_light_dir, col_white);
+    // scene->addLight(*dir_light1);
 
-    dl = new DirectionalLight(v, cl);
+    // POINT LIGHT
+    Vertex point_light_pos (2, 2, 0, 1.0);
+    PointLight *pt_light1 = new PointLight(point_light_pos, col_white);
+    scene->addLight(*pt_light1);
+    // POINT LIGHT SPHERE MARKER
 
-    scene->addLight(*dl);
+    float marker_radius = 0.1;
+    addSphere(scene, point_light_pos, marker_radius, 1.0, 1.0, 1.0);
+    
+    // addSphere(scene, point_light_pos, marker_radius, 0.3, 0.7, 0.3);
+
+
 
     // origin
     Vertex sphere_location_1(0, 0, 0, 1);
@@ -225,6 +235,15 @@ int main(int argc, const char *argv[])
     tri1->rotate_z(45);
     tri1->translate(0, 2, 0);
     scene->addObject(*tri1);
+
+    OpenCylinder *opencylinder1 = new OpenCylinder(-1,1,0.5);
+    opencylinder1->setMaterial(newMaterial);
+
+    Instance *oc1 = new Instance(opencylinder1);
+    oc1->rotate_z(-60);
+    oc1->rotate_y(-60);
+    oc1->translate(-2, -2, -3);
+    scene->addObject(*oc1);
 
     // Instance* ellipse = new Instance(new Sphere(ellipse_c, ellipse_r));
     // ellipse->set_material(grayMaterial);

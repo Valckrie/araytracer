@@ -7,12 +7,12 @@
 class Object;
 
 class Hit {
-	public:
-	Vertex p;				// point
-	Vector n;				// normal
-	double t;				// ray parameter
-	Object *obj;			// obj
-	Hit(void);
+    public:
+        Vertex p;               // point
+        Vector n;               // normal
+        double t;               // ray parameter
+        Object *obj;            // obj
+        Hit(void);
 };
 
 #endif

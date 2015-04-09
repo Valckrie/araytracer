@@ -4,11 +4,13 @@
 #include "include/light.h"
 
 class DirectionalLight: public Light {
-  Vector direction;
-  Colour intensity;
- public:
-  DirectionalLight(Vector &d, Colour &c);
-  virtual void getLightProperties(Vertex &pos, Vector *ldir, Colour *i);
+    Vector direction;
+    Colour intensity;
+    
+    public:
+        
+        DirectionalLight(Vector &d, Colour &c);
+        virtual void getLightProperties(Vertex &pos, Vector *ldir, Colour *i);
 };
 
 #endif

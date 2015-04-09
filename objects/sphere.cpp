@@ -73,10 +73,13 @@ bool Sphere::intersect(Ray &ray, Hit *hit)
     if (t0 < 0.0) {
         hit->t = t1;
 
-        hit->p.x = ray.P.x  + t1 * ray.D.x;
-        hit->p.y = ray.P.y  + t1 * ray.D.y;
-        hit->p.z = ray.P.z  + t1 * ray.D.z;
-        hit->p.w = 1.0;
+        // hit->p.x = ray.P.x  + t1 * ray.D.x;
+        // hit->p.y = ray.P.y  + t1 * ray.D.y;
+        // hit->p.z = ray.P.z  + t1 * ray.D.z;
+        // hit->p.w = 1.0;
+
+        hit->p = ray.position(t1);
+
         hit->n.x = hit->p.x - centre.x;
         hit->n.y = hit->p.y - centre.y;
         hit->n.z = hit->p.z - centre.z;
@@ -87,10 +90,13 @@ bool Sphere::intersect(Ray &ray, Hit *hit)
 
     hit->t = t0;
 
-    hit->p.x = ray.P.x  + t0 * ray.D.x;
-    hit->p.y = ray.P.y  + t0 * ray.D.y;
-    hit->p.z = ray.P.z  + t0 * ray.D.z;
-    hit->p.w = 1.0;
+    // hit->p.x = ray.P.x  + t0 * ray.D.x;
+    // hit->p.y = ray.P.y  + t0 * ray.D.y;
+    // hit->p.z = ray.P.z  + t0 * ray.D.z;
+    // hit->p.w = 1.0;
+
+    hit->p = ray.position(t0);
+
     hit->n.x = hit->p.x - centre.x;
     hit->n.y = hit->p.y - centre.y;
     hit->n.z = hit->p.z - centre.z;

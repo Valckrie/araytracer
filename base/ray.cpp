@@ -1,6 +1,5 @@
 #include "include/ray.h"
 
-
 Vertex Ray::position(double t)
 {
   Vertex v;

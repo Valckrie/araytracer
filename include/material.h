@@ -4,15 +4,15 @@
 #include "include/colour.h"
 
 class Material {
-	public:
-	Colour ka;
-	Colour kd;
-	Colour ks;
-	Colour kr;
-	Colour kt;
-	double n;
-	Material(void);
-	Material(double R, double G, double B);
+    public:
+    Colour ka;              // ambient component
+    Colour kd;              // diffuse component
+    Colour ks;              // specular component
+    Colour kr;              // reflection
+    Colour kt;              // transmission / refraction
+    double n;
+    Material(void);
+    Material(double R, double G, double B);
 };
 
 #endif
