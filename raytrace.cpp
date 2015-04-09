@@ -148,7 +148,7 @@ int main(int argc, const char *argv[])
     col_white.set(1.0,1.0,1.0,1.0);
 
     Camera* cam = new Camera();
-    cam->set_eye(0, 20, -50, 1);
+    cam->set_eye(0, 20, -60, 1);
     cam->set_lookat(0, 0, 0, 1);
     cam->compute_uvw();
 
@@ -162,7 +162,7 @@ int main(int argc, const char *argv[])
     PointLight *pt_light1 = new PointLight(point_light_pos, col_white);
     pt_light1->setLumScale(2.0);
     scene->addLight(*pt_light1);
-    
+
     // POINT LIGHT SPHERE MARKER
     float marker_radius = 0.5;
     addSphere(scene, point_light_pos, marker_radius, 1.0, 1.0, 1.0);
@@ -205,16 +205,28 @@ int main(int argc, const char *argv[])
     wall->setMaterial(grayMaterial);
     // scene->addObject(*wall);
 
-    Vertex ellipse_c (-10, 0, 0, 1);
-    float ellipse_r = 5;
+    Vertex ellipse_c (0, 0, 0, 1);
+    float ellipse_r = 3;
     Sphere* ellipse = new Sphere(ellipse_c, ellipse_r);
     ellipse->setMaterial(grayMaterial);
 
-    Instance *ee2 = new Instance(ellipse);
-    ee2->scale(2, 2, 2);
-    ee2->rotate_y(0);
-    ee2->translate(0, 0, 0);
-    scene->addObject(*ee2);
+    Instance *e2 = new Instance(ellipse);
+    e2->scale(1, 1, 1);
+    e2->rotate_y(0);
+    e2->translate(-15, 0, -20);
+    scene->addObject(*e2);
+
+    Instance *e3 = new Instance(ellipse);
+    e3->scale(1, 1, 1);
+    e3->rotate_y(0);
+    e3->translate(-10, 0, -20);
+    scene->addObject(*e3);
+
+    Instance *e4 = new Instance(ellipse);
+    e4->scale(1, 1, 1);
+    e4->rotate_y(0);
+    e4->translate(-5, 0, -20);
+    scene->addObject(*e4);   
 
     Triangle *triangle1 = new Triangle(Vertex(-5, 10, 1), Vertex(0, 15, 1), Vertex(5, 10, 1));
     triangle1->setMaterial(newMaterial);
