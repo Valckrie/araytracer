@@ -24,7 +24,7 @@ class Object {
 	Colour getColour();
 
 	// maybe needs to change
-	virtual bool shadow_hit(Ray &ray, float &t) { return false; }
+	virtual bool shadow_hit(Ray &ray, Hit *sh) { return false; }
 
 	virtual bool intersect(Ray &ray, Hit *h) { return false; }
 	virtual bool sintersect(Ray &ray, Hit *h, double tl);

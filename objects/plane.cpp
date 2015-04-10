@@ -6,7 +6,7 @@
 
 // Plane defined as vertex point and normal
 
-const double Plane::kEpsilon = 0.000001;
+const double Plane::kEpsilon = 0.0001;
 
 Plane::Plane(void) {
     point = Vertex(0.0, 0.0, 0.0, 0.0);
@@ -59,12 +59,12 @@ bool Plane::intersect(Ray &ray, Hit *hit) {
     return(false);
 }
 
-bool Plane::shadow_hit(Ray& ray, float& tmin) {  
+bool Plane::shadow_hit(Ray& ray, Hit * sh) {  
     // float t = (a - ray.o) * n / (ray.d * n);
     float t = point.subtract(ray.P).dot(normal) / ray.D.dot(normal);
                                 
     if (t > kEpsilon) {
-        tmin = t;
+        sh->t = t;
         return (true);  
     }
     else

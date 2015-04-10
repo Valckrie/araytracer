@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "include/scene.h"
+#include "include/constants.h"
 using namespace std;
 Scene::Scene()
 {
@@ -44,7 +45,7 @@ Colour Scene::raytrace(Ray &ray, int level) {
 
     // TEST EACH OBJECT AGAINST RAY, FIND THE CLOSEST
 
-    t = 1000000000.0; // a long way aways
+    t = kHugeValue; // a long way aways
     closest = (Object *)0;
     obj = obj_list;
 
@@ -134,19 +135,58 @@ Colour Scene::raytrace(Ray &ray, int level) {
 
 // shadow part
 
+
+
             // cout << "reach pre shadow";
+
+            // check for shadow intersections
+            Object *obj2;
+            // LOCATION IS LIGHT LOCATION< PASS IN AS PARAMETER
+            Vertex location (10, 10, 0, 1);
+
+            float shadowt;
+            float d = location.distance(ray.P);
+            
+
             bool in_shadow = false;
+
+
+            Ray shadowray(position, xldir);
+
+            Hit shadowhit;
+
             if(lt->cast_shadows()) {
-                Ray shadowray(position, xldir);
-                in_shadow = shadowtrace(shadowray, 10);
+                obj2 = obj_list;
+                while (obj2 != (Object *)0) {
+                    if(obj2->shadow_hit(shadowray, &shadowhit)) {
+                        // cout << "\n chklpoint 1";
+
+                        if(shadowhit.t < d) {
+                            in_shadow = true;
+                        }
+                        break;
+                    }
+                    obj2 = obj2->next();
+                }
+                // false
             }
 
-// combine components
+// orig shadow func
+            // bool in_shadow = false;
+            // if(lt->cast_shadows()) {
+            //     Ray shadowray(position, xldir);
+            //     in_shadow = shadowtrace(shadowray, 10);
+            // }
 
-            if(!in_shadow) {
-                col.red     += ka.red   + lcol.red *    (dlc * kd.red   + slc * ks.red);
-                col.green   += ka.green + lcol.green *  (dlc * kd.green + slc * ks.green);
-                col.blue    += ka.blue  + lcol.blue *   (dlc * kd.blue  + slc * ks.blue);
+// combine components
+            // cout << in_shadow ;
+            col.red     += ka.red;
+            col.green   += ka.green;
+            col.blue    += ka.blue;
+            if(in_shadow == false) {
+                col.red     += lcol.red *    (dlc * kd.red   + slc * ks.red);
+                col.green   += lcol.green *  (dlc * kd.green + slc * ks.green);
+                col.blue    += lcol.blue *   (dlc * kd.blue  + slc * ks.blue);
             }
 
             lt = lt->next(); // next light
@@ -163,6 +203,7 @@ Colour Scene::raytrace(Ray &ray, int level) {
 bool shadowtrace(Ray &ray, double tlimit)
 {
 
+    /*
     cout << "shadow trace";
     // tlimit is d !
 
@@ -186,16 +227,19 @@ bool shadowtrace(Ray &ray, double tlimit)
         }
         obj = obj->next();
     }
+    */
 
-    // float t;
-    // int numObjects = sr.w.objects.size();
-    // float d = location.distance(ray.o);
+    /*
+    float t;
+    int numObjects = sr.w.objects.size();
+    float d = location.distance(ray.o);
                                                         
-    // for (int j = 0; j < num_objects; j++)
-    //     if (sr.w.objects[j]->shadow_hit(ray, t) && t < d)
-    //         return (true); 
+    for (int j = 0; j < num_objects; j++)
+        if (sr.w.objects[j]->shadow_hit(ray, t) && t < d)
+            return (true); 
                                                         
-    // return (false);   
+    return (false);   
+    */
 
     return false;
 }

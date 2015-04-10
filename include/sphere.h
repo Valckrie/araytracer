@@ -12,7 +12,9 @@ class Sphere: public Object {
 		Vertex getCentre();
 		float getRad();
 		bool intersect(Ray &ray, Hit *h);
-		bool shadow_hit(Ray &ray, float &tmin);
+		bool shadow_hit(Ray &ray, Hit *sh);
+
+		static const double kEpsilon;   // for shadows and secondary rays
 };
 
 #endif

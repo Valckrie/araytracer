@@ -18,6 +18,14 @@ Light *Light::next(void)
   return lt_next;
 }
 
+void Light::turn_shadows(int option) {
+	if(option == 1) {
+		shadows = true;
+	} else if(option == 0) {
+		shadows = false;
+	}
+}
+
 void Light::getLightProperties(Vertex &pos, Vector *ldir, Colour *intensity)
 {
 }

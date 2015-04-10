@@ -10,10 +10,11 @@ class Light {
 	bool shadows;
 
 	public:
-
+	// bool shadows;
 		Light(void);
 		void link(Light *light);
 		Light *next(void);
+		void turn_shadows(int option);
 		
 		bool cast_shadows();
 		virtual void getLightProperties(Vertex &pos, Vector *ldir, Colour *i);

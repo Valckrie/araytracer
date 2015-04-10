@@ -4,8 +4,11 @@
 #include <math.h>
 
 #include "include/sphere.h"
+#include "include/constants.h"
 using namespace std;
 // Sphere defined as vertex (in world space) and radius
+
+const double Sphere::kEpsilon = 0.001;
 
 Sphere::Sphere(Vertex &c, float r)
 {
@@ -62,7 +65,7 @@ bool Sphere::intersect(Ray &ray, Hit *hit)
         t1 = temp;
     }
 
-    if (t1 < 0.0) {
+    if (t1 < kEpsilon) {
         return false;
     }
 
@@ -70,7 +73,7 @@ bool Sphere::intersect(Ray &ray, Hit *hit)
 
     hit->obj = this;
 
-    if (t0 < 0.0) {
+    if (t0 < kEpsilon) {
         hit->t = t1;
 
         // hit->p.x = ray.P.x  + t1 * ray.D.x;
@@ -105,7 +108,7 @@ bool Sphere::intersect(Ray &ray, Hit *hit)
     return true;
 }
 
-bool Sphere::shadow_hit(Ray &ray, float &tmin) {
+bool Sphere::shadow_hit(Ray &ray, Hit *sh) {
     // cout << "Sphere Shadow Hit" << "\n";
     Vector ro;
 
@@ -139,22 +142,22 @@ bool Sphere::shadow_hit(Ray &ray, float &tmin) {
         t1 = temp;
     }
 
-    if (t1 < 0.0) {
+    if (t1 < kEpsilon) {
         return false;
     }
 
     // if an intersection has been found, record details in hit object
 
-    if (t0 < 0.0) {
+    if (t0 < kEpsilon) {
 
         // hit->t = t1;
-        tmin = t1;
+        sh->t = t1;
 
         return true;
     } else {
 
         // hit->t = t0;
-        tmin = t0;
+        sh->t = t0;
 
         return true;
     }
