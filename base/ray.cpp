@@ -1,5 +1,14 @@
 #include "include/ray.h"
 
+Ray::Ray(void) {
+	
+}
+
+Ray::Ray(Vertex p, Vector d) {
+	P = p;
+	D = d;
+}
+
 Vertex Ray::position(double t)
 {
   Vertex v;

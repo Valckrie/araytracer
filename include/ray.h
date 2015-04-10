@@ -5,11 +5,12 @@
 #include "include/vector.h"
 
 class Ray {
- public:
-  Vertex P;
-  Vector D;
-  Vertex position(double t);
+	public:
+	Vertex P;
+	Vector D;
+	Vertex position(double t);
+	Ray(void);
+	Ray(Vertex p, Vector d);
 };
-
 
 #endif

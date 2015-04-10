@@ -16,6 +16,7 @@ class Vertex {
 	void set(double x, double y, double z, double w);
 	void set(Vertex v);
 	Vector subtract (Vertex v);
+	double distance(Vertex &p);
 };
 
 Vertex operator* (const Matrix& mat, const Vertex& p);

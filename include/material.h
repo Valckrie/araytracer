@@ -13,6 +13,9 @@ class Material {
     double n;
     Material(void);
     Material(double R, double G, double B);
+    Material(double R, double G, double B, double SPEC);
+    void copySpecular();
+    Material(int id);
 };
 
 #endif

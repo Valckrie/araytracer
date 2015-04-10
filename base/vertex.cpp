@@ -45,6 +45,12 @@ Vector Vertex::subtract (Vertex v) {
     return Vector(x - v.x, y - v.y, z - v.z);
 }
 
+double Vertex::distance(Vertex& p) {
+    return (sqrt(   (x - p.x) * (x - p.x) 
+                +   (y - p.y) * (y - p.y)
+                +   (z - p.z) * (z - p.z) ));
+}
+
 Vertex operator* (const Matrix& mat, const Vertex& p) {
 	return (Vertex(mat.m[0][0] * p.x + mat.m[0][1] * p.y + mat.m[0][2] * p.z + mat.m[0][3],
 					mat.m[1][0] * p.x + mat.m[1][1] * p.y + mat.m[1][2] * p.z + mat.m[1][3],

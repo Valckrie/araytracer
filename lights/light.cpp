@@ -21,3 +21,7 @@ Light *Light::next(void)
 void Light::getLightProperties(Vertex &pos, Vector *ldir, Colour *intensity)
 {
 }
+
+bool Light::cast_shadows() {
+	return shadows;
+}

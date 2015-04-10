@@ -104,3 +104,58 @@ bool Sphere::intersect(Ray &ray, Hit *hit)
 
     return true;
 }
+
+bool Sphere::shadow_hit(Ray &ray, float &tmin) {
+    // cout << "Sphere Shadow Hit" << "\n";
+    Vector ro;
+
+    ro.set(ray.P.x-centre.x,ray.P.y-centre.y,ray.P.z-centre.z);
+
+    float a = ray.D.dot(ray.D);
+    float b = 2.0 * ray.D.dot(ro);
+    float c = ro.dot(ro) - radius*radius;
+
+    float disc = b*b - 4*a*c;
+
+    if (disc < 0.0) {
+        return false; // a negative value indicates no intersection.
+    }
+    // else all of below
+    float ds = sqrtf(disc);
+    float q;
+
+    if (b < 0.0) {
+        q = (-b - ds)/2.0;              // smaller root
+    } else {
+        q = (-b + ds)/2.0;              // larger root
+    }
+
+    float t0 = q/a;
+    float t1 = c/q;
+
+    if (t0>t1) {
+        float temp = t0;
+        t0 = t1;
+        t1 = temp;
+    }
+
+    if (t1 < 0.0) {
+        return false;
+    }
+
+    // if an intersection has been found, record details in hit object
+
+    if (t0 < 0.0) {
+
+        // hit->t = t1;
+        tmin = t1;
+
+        return true;
+    } else {
+
+        // hit->t = t0;
+        tmin = t0;
+
+        return true;
+    }
+}

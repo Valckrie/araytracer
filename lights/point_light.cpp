@@ -36,8 +36,14 @@ void PointLight::setLumScale(float ls) {
     lum_scale = ls;
 }
 
-
-// Vector3D
-// PointLight::get_direction(ShadeRec& sr) { 
-//   return ((location - sr.hitPoint).hat());
-// }
+bool PointLight::in_shadow(Ray& ray, Hit *hit) {
+    // float t;
+    // int numObjects = sr.w.objects.size();
+    // float d = location.distance(ray.o);
+                                                        
+    // for (int j = 0; j < num_objects; j++)
+    //     if (sr.w.objects[j]->shadow_hit(ray, t) && t < d)
+    //         return (true); 
+                                                        
+    // return (false);     
+}

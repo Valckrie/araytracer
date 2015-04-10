@@ -1,7 +1,8 @@
 #include <math.h>
+#include <iostream>
 
 #include "include/scene.h"
-
+using namespace std;
 Scene::Scene()
 {
   scache = 0;
@@ -92,7 +93,7 @@ Colour Scene::raytrace(Ray &ray, int level) {
             }
 
 // == calculate specular component here
-            // float slc = 0.0;
+            float slc = 0.0;
 
             // ndotwi = dlc        // diffuse component
             // wi = xldir          // light direction
@@ -113,25 +114,40 @@ Colour Scene::raytrace(Ray &ray, int level) {
 
             // float rdotwo = r * wo;        
             float rdotwo = r.dot(wo);
-            rdotwo = pow(rdotwo, 20);
+            rdotwo = pow(rdotwo, 37);
 
             // if (rdotwo > 0.0) {
             //     L = ks * cs * pow(rdotwo, exp);
             //     L = ks * cs * pow(rdotwo, 20);
             // }
 
-            float slc = rdotwo;
-            if (slc < 0.0) {
-                slc = 0.0;
+            // cout << "R" << rdotwo << "\n" ;
+
+            if(rdotwo > 0.0) {
+                slc = rdotwo;
             }
 
+            // float slc = rdotwo;
+            // if (slc < 0.0) {
+            //     slc = 0.0;
+            // }
 
+// shadow part
+
+            // cout << "reach pre shadow";
+            bool in_shadow = false;
+            if(lt->cast_shadows()) {
+                Ray shadowray(position, xldir);
+                in_shadow = shadowtrace(shadowray, 10);
+            }
 
 // combine components
 
-            col.red     += ka.red   + lcol.red *    (dlc * kd.red   + slc * ks.red);
-            col.green   += ka.green + lcol.green *  (dlc * kd.green + slc * ks.green);
-            col.blue    += ka.blue  + lcol.blue *   (dlc * kd.blue  + slc * ks.blue);
+            if(!in_shadow) {
+                col.red     += ka.red   + lcol.red *    (dlc * kd.red   + slc * ks.red);
+                col.green   += ka.green + lcol.green *  (dlc * kd.green + slc * ks.green);
+                col.blue    += ka.blue  + lcol.blue *   (dlc * kd.blue  + slc * ks.blue);
+            }
 
             lt = lt->next(); // next light
         }
@@ -144,12 +160,42 @@ Colour Scene::raytrace(Ray &ray, int level) {
 }
 
 
-bool Scene::shadowtrace(Ray &ray, double tlimit)
+bool shadowtrace(Ray &ray, double tlimit)
 {
-  Object *obj;
-  Hit   hit;
 
-  // check for shadow intersections
+    cout << "shadow trace";
+    // tlimit is d !
 
-  return false;
+    // check for shadow intersections
+    Object *obj;
+    Object *closest;
+    Hit   hit;
+
+    // LOCATION IS LIGHT LOCATION< PASS IN AS PARAMETER
+    Vertex location (10, 10, 0, 1);
+
+    float t;
+    float d = location.distance(ray.P);
+
+    closest = (Object *)0;
+    obj = obj_list;
+
+    while (obj != (Object *)0) {
+        if(obj->shadow_hit(ray, t) && t < d) {
+            return true;
+        }
+        obj = obj->next();
+    }
+
+    // float t;
+    // int numObjects = sr.w.objects.size();
+    // float d = location.distance(ray.o);
+                                                        
+    // for (int j = 0; j < num_objects; j++)
+    //     if (sr.w.objects[j]->shadow_hit(ray, t) && t < d)
+    //         return (true); 
+                                                        
+    // return (false);   
+
+    return false;
 }

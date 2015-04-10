@@ -7,6 +7,7 @@
 
 class Light {
 	Light *lt_next;
+	bool shadows;
 
 	public:
 
@@ -14,6 +15,7 @@ class Light {
 		void link(Light *light);
 		Light *next(void);
 		
+		bool cast_shadows();
 		virtual void getLightProperties(Vertex &pos, Vector *ldir, Colour *i);
 };
 
