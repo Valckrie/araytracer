@@ -169,11 +169,11 @@ int main(int argc, const char *argv[])
     
     Vertex testpos (0, 5, 0, 1.0);
     float test = 3;
-    addSphere(scene, testpos, test, 0.8, 0.1, 0.3);
+    // addSphere(scene, testpos, test, 0.8, 0.1, 0.3);
 
     Vertex testpos2 (2, 2, 0, 1.0);
     float test2 = 1;
-    addSphere(scene, testpos2, test2, 0.5, 0.5, 0.5);
+    // addSphere(scene, testpos2, test2, 0.5, 0.5, 0.5);
 
 
     Material *grayMaterial = new Material();
@@ -226,31 +226,31 @@ int main(int argc, const char *argv[])
     sphgray->scale(2.5, 2.5, 2.5);
     sphgray->rotate_y(0);
     sphgray->translate(7, -3.5, 0);
-    scene->addObject(*sphgray);
+    // scene->addObject(*sphgray);
 
     Instance *e2 = new Instance(ellipse);
     e2->scale(2.3, 2.3, 2.3);
     e2->rotate_y(0);
     e2->translate(5, 0, -15);
-    scene->addObject(*e2);
+    // scene->addObject(*e2);
 
     Instance *e3 = new Instance(sphereSpec);
     e3->scale(2, 2, 2);
     e3->rotate_y(0);
     e3->translate(5, 1, 4.2);
-    scene->addObject(*e3);
+    // scene->addObject(*e3);
 
     Instance *e4 = new Instance(sphereRed);
     e4->scale(1.5, 1.5, 1.5);
     e4->rotate_y(0);
     e4->translate(7, -4, 6);
-    scene->addObject(*e4);   
+    // scene->addObject(*e4);   
 
     Instance *e5 = new Instance(sphereBlue);
     e5->scale(1.5, 1.5, 1.5);
     e5->rotate_y(0);
     e5->translate(0, -5, 0);
-    scene->addObject(*e5);
+    // scene->addObject(*e5);
 
     Instance *e6 = new Instance(sphereGreen);
     e6->scale(1.5, 1.5, 1.5);
@@ -262,7 +262,7 @@ int main(int argc, const char *argv[])
     e7->scale(1.5, 1.5, 1.5);
     e7->rotate_y(0);
     e7->translate(-7, -5, 6);
-    scene->addObject(*e7);
+    // scene->addObject(*e7);
 
     // Triangle *triangle1 = new Triangle(Vertex(-5, 10, 1), Vertex(0, 15, 1), Vertex(5, 10, 1));
     // triangle1->setMaterial(newMaterial);
@@ -280,7 +280,7 @@ int main(int argc, const char *argv[])
     // oc1->rotate_y(-60);
     oc1->scale(1, 8.5, 1);
     oc1->translate(-5, -5, -5);
-    scene->addObject(*oc1);
+    // scene->addObject(*oc1);
 
     // for (int i = 0; i < 10; i++) {
     //     addSphere(scene, p1, rad1);
@@ -327,7 +327,7 @@ int main(int argc, const char *argv[])
                     ray.D.set(ray_dir);
                     ray.D.normalise();
 
-                    sample = scene->raytrace(ray, 2);
+                    sample = scene->raytrace(ray, 1);
                     total.add(sample);
                 }
             }

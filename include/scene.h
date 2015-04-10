@@ -14,7 +14,7 @@ public:
   Scene(void);
   void addObject(Object &obj);
   void addLight(Light &light);
-  Colour raytrace(Ray &ray, int level);
+  Colour raytrace(Ray ray, int level);
   bool shadowtrace(Ray &ray, double tlimit);
 };
 
