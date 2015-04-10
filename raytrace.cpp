@@ -16,9 +16,8 @@
 
 using namespace std;
 
-#define XSIZE 512
-#define YSIZE 512
-
+#define XSIZE 640
+#define YSIZE 480
 
 Colour frame_buffer[YSIZE][XSIZE];
 
@@ -148,8 +147,8 @@ int main(int argc, const char *argv[])
     col_white.set(1.0,1.0,1.0,1.0);
 
     Camera* cam = new Camera();
-    cam->set_eye(0, 20, -60, 1);
-    cam->set_lookat(0, 0, 0, 1);
+    cam->set_eye(0, 10, 25, 1);
+    cam->set_lookat(0, 5, 0, 1);
     cam->compute_uvw();
 
     // Create and add a directional light to the scene
@@ -158,7 +157,7 @@ int main(int argc, const char *argv[])
     // scene->addLight(*dir_light1);
 
     // POINT LIGHT
-    Vertex point_light_pos (15, 15, -7.5, 1.0);
+    Vertex point_light_pos (10, 10, 0, 1.0);
     PointLight *pt_light1 = new PointLight(point_light_pos, col_white);
     pt_light1->setLumScale(2.0);
     scene->addLight(*pt_light1);
@@ -166,30 +165,16 @@ int main(int argc, const char *argv[])
     // POINT LIGHT SPHERE MARKER
     float marker_radius = 0.5;
     addSphere(scene, point_light_pos, marker_radius, 1.0, 1.0, 1.0);
-    
-    // origin
-    Vertex sphere_location_1(0, 0, 0, 1);
-    float sphere_radius_1 = 6;
-    // in front
-    Vertex sphere_location_2(4, 4, 0, 1);
-    float sphere_radius_2 = 3;
-    // in front
-    Vertex sphere_location_3(-4, -4, 0, 1);
-    float sphere_radius_3 = 3;
-
-    addSphere(scene, sphere_location_1, sphere_radius_1, 0.3, 0.3, 0.3);
-    addSphere(scene, sphere_location_2, sphere_radius_2, 0.3, 0.7, 0.3);
-    addSphere(scene, sphere_location_3, sphere_radius_3, 0.8, 0.2, 0.2);
 
     Material *grayMaterial = new Material();
     Material *newMaterial = new Material(0.2, 0.8, 0.4);
-
-    Sphere *sz;
-    Vertex cz(-5, -5, -10, 1);
-    float rz = 2;
-    sz = new Sphere(cz, rz);
-    sz->setMaterial(grayMaterial);
-    scene->addObject(*sz);
+    Material *specR = new Material(0.8, 0.2, 0.2, 1.0);
+    Material *specG = new Material(0.2, 0.8, 0.2, 0.8);
+    Material *specB = new Material(0.2, 0.2, 0.8, 0.6);
+    specB->copySpecular();
+    Material *matteB = new Material(0.2, 0.2, 0.8, 0.0);
+    Material *matteG = new Material(0.2, 0.2, 0.8, 0.0);
+    Material *bronze = new Material(1);
 
     Plane *ground;
     Vertex ground_point(0, -5, 0, 1);
@@ -198,68 +183,93 @@ int main(int argc, const char *argv[])
     ground->setMaterial(grayMaterial);
     scene->addObject(*ground);
 
-    Plane *wall;
-    Vertex wall_point(5, 0, 0, 1);
-    Vector wall_normal(-1, 0, 0);
-    wall = new Plane(wall_point, wall_normal);
-    wall->setMaterial(grayMaterial);
-    // scene->addObject(*wall);
+
 
     Vertex ellipse_c (0, 0, 0, 1);
-    float ellipse_r = 3;
+    float ellipse_r = 1;
     Sphere* ellipse = new Sphere(ellipse_c, ellipse_r);
     ellipse->setMaterial(grayMaterial);
 
+    Sphere* sphereGreen = new Sphere(ellipse_c, ellipse_r);
+    sphereGreen->setMaterial(specG);
+
+    Sphere* sphereSpec = new Sphere(ellipse_c, ellipse_r);
+    sphereSpec->setMaterial(newMaterial);
+
+    Sphere* sphereRed = new Sphere(ellipse_c, ellipse_r);
+    sphereRed->setMaterial(specR);
+
+    Sphere* sphereBlue = new Sphere(ellipse_c, ellipse_r);
+    sphereBlue->setMaterial(specB);
+
+    Sphere* sphBrz = new Sphere(ellipse_c, ellipse_r);
+    sphBrz->setMaterial(bronze);
+
+    Instance *e1 = new Instance(sphBrz);
+    e1->scale(2.5, 2.5, 2.5);
+    e1->rotate_y(0);
+    e1->translate(0, -3.5, 0);
+    scene->addObject(*e1);
+
+    Instance *sphgray = new Instance(ellipse);
+    sphgray->scale(2.5, 2.5, 2.5);
+    sphgray->rotate_y(0);
+    sphgray->translate(7, -3.5, 0);
+    scene->addObject(*sphgray);
+
     Instance *e2 = new Instance(ellipse);
-    e2->scale(1, 1, 1);
+    e2->scale(2.3, 2.3, 2.3);
     e2->rotate_y(0);
-    e2->translate(-15, 0, -20);
+    e2->translate(5, 0, -15);
     scene->addObject(*e2);
 
-    Instance *e3 = new Instance(ellipse);
-    e3->scale(1, 1, 1);
+    Instance *e3 = new Instance(sphereSpec);
+    e3->scale(2, 2, 2);
     e3->rotate_y(0);
-    e3->translate(-10, 0, -20);
+    e3->translate(5, 1, 4.2);
     scene->addObject(*e3);
 
-    Instance *e4 = new Instance(ellipse);
-    e4->scale(1, 1, 1);
+    Instance *e4 = new Instance(sphereRed);
+    e4->scale(1.5, 1.5, 1.5);
     e4->rotate_y(0);
-    e4->translate(-5, 0, -20);
+    e4->translate(7, -4, 6);
     scene->addObject(*e4);   
 
-    Triangle *triangle1 = new Triangle(Vertex(-5, 10, 1), Vertex(0, 15, 1), Vertex(5, 10, 1));
-    triangle1->setMaterial(newMaterial);
+    Instance *e5 = new Instance(sphereBlue);
+    e5->scale(1.5, 1.5, 1.5);
+    e5->rotate_y(0);
+    e5->translate(0, -5, 0);
+    scene->addObject(*e5);
 
-    Instance *tri1 = new Instance(triangle1);
-    tri1->rotate_z(0);
-    tri1->translate(0, 0, 0);
-    scene->addObject(*tri1);
+    Instance *e6 = new Instance(sphereGreen);
+    e6->scale(1.5, 1.5, 1.5);
+    e6->rotate_y(0);
+    e6->translate(0, 0, 0);
+    scene->addObject(*e6);
 
-    OpenCylinder *opencylinder1 = new OpenCylinder(-10, 10, 5);
+    Instance *e7 = new Instance(sphereBlue);
+    e7->scale(1.5, 1.5, 1.5);
+    e7->rotate_y(0);
+    e7->translate(-7, -5, 6);
+    scene->addObject(*e7);
+
+    // Triangle *triangle1 = new Triangle(Vertex(-5, 10, 1), Vertex(0, 15, 1), Vertex(5, 10, 1));
+    // triangle1->setMaterial(newMaterial);
+
+    // Instance *tri1 = new Instance(triangle1);
+    // tri1->rotate_z(0);
+    // tri1->translate(0, 0, 0);
+    // scene->addObject(*tri1);
+
+    OpenCylinder *opencylinder1 = new OpenCylinder(0, 1, 2.2);
     opencylinder1->setMaterial(newMaterial);
 
     Instance *oc1 = new Instance(opencylinder1);
-    oc1->rotate_z(-60);
-    oc1->rotate_y(-60);
-    oc1->translate(12, 0, 0);
+    // oc1->rotate_z(-60);
+    // oc1->rotate_y(-60);
+    oc1->scale(1, 8.5, 1);
+    oc1->translate(-5, -5, -5);
     scene->addObject(*oc1);
-
-    // Instance* ellipse = new Instance(new Sphere(ellipse_c, ellipse_r));
-    // ellipse->set_material(grayMaterial);
-    // ellipse->scale(2, 3, 1);
-    // ellipse->rotate_x(-45);
-    // ellipse->translate(0, 1, 0);
-    
-    // scene->addObject(*ellipse);
-
-
-    // Plane *wall2;
-    // Vertex wall2_point(-5, 0, 0, 1);
-    // Vector wall2_normal(1, 0, 0);
-    // wall2 = new Plane(wall2_point, wall2_normal);
-    // wall2->setMaterial(grayMaterial);
-    // scene->addObject(*wall2);
 
     // for (int i = 0; i < 10; i++) {
     //     addSphere(scene, p1, rad1);
@@ -282,10 +292,20 @@ int main(int argc, const char *argv[])
             for(int i = 0; i < ss; i++) {           // up sample
                 for(int j = 0; j < ss; j++) {       // across sample
 
+                // pp.x = vp.s * (c - 0.5 * vp.hres + (q + 0.5) / n); 
+                // pp.y = vp.s * (r - 0.5 * vp.vres + (p + 0.5) / n);
+
+
+
+
                     samplepixel.x = (float)x - 0.5 * XSIZE + (j + 0.5) / ss;
                     samplepixel.x = (samplepixel.x / XSIZE);
-                    samplepixel.y = (float)y - 0.5 * YSIZE + (i + 0.5) / ss;
-                    samplepixel.y = (samplepixel.y / YSIZE);
+                    samplepixel.y = (float)y - 0.5 * XSIZE + (i + 0.5) / ss;
+                    samplepixel.y = (samplepixel.y / XSIZE);
+                    
+                    // samplepixel.x = ((float)x/XSIZE) - 0.5 * XSIZE + (j + 0.5) / ss;
+                    // samplepixel.y = ((float)y/YSIZE) - 0.5 * YSIZE + (i + 0.5) / ss;
+
                     // cout << "ss.x " << samplepixel.x;
                     // cout << " ss.y " << samplepixel.y << "\n";
 
@@ -306,8 +326,6 @@ int main(int argc, const char *argv[])
             // Ray ray;
             // double normalized_x = (((float)x)/XSIZE)-0.5;
             // double normalized_y = (((float)y)/YSIZE)-0.5;
-            // cout << "norm x " << normalized_x;
-            // cout << " norm y " << normalized_y << "\n";
             // Vector ray_dir = cam->w.add(cam->u.multiply(normalized_x).add(cam->v.multiply(normalized_y)));
             // ray.P.set(cam->eye);
             // ray.D.set(ray_dir);
