@@ -191,7 +191,7 @@ int main(int argc, const char *argv[])
     Vertex ground_point(0, -5, 0, 1);
     Vector ground_normal(0, 1, 0);
     ground = new Plane(ground_point, ground_normal);
-    ground->setMaterial(grayMaterial);
+    ground->setMaterial(bronzeR);
     scene->addObject(*ground);
 
 
@@ -219,7 +219,7 @@ int main(int argc, const char *argv[])
     Instance *e1 = new Instance(sphBrz);
     e1->scale(2.5, 2.5, 2.5);
     e1->rotate_y(0);
-    e1->translate(0, -3.5, 0);
+    e1->translate(0, 0, 0);
     scene->addObject(*e1);
 
     Instance *sphgray = new Instance(ellipse);
@@ -256,7 +256,7 @@ int main(int argc, const char *argv[])
     e6->scale(1.5, 1.5, 1.5);
     e6->rotate_y(0);
     e6->translate(0, 0, 0);
-    scene->addObject(*e6);
+    // scene->addObject(*e6);
 
     Instance *e7 = new Instance(sphereBlue);
     e7->scale(1.5, 1.5, 1.5);
@@ -327,7 +327,7 @@ int main(int argc, const char *argv[])
                     ray.D.set(ray_dir);
                     ray.D.normalise();
 
-                    sample = scene->raytrace(ray, 1);
+                    sample = scene->raytrace(ray, 0);
                     total.add(sample);
                 }
             }
