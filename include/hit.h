@@ -12,6 +12,8 @@ class Hit {
         Vector n;               // normal
         double t;               // ray parameter
         Object *obj;            // obj
+
+        int depth;              // depth
         Hit(void);
 };
 

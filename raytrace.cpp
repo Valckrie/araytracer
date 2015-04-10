@@ -185,6 +185,7 @@ int main(int argc, const char *argv[])
     Material *matteB = new Material(0.2, 0.2, 0.8, 0.0);
     Material *matteG = new Material(0.2, 0.2, 0.8, 0.0);
     Material *bronze = new Material(1);
+    Material *bronzeR = new Material(2);
 
     Plane *ground;
     Vertex ground_point(0, -5, 0, 1);
@@ -213,7 +214,7 @@ int main(int argc, const char *argv[])
     sphereBlue->setMaterial(specB);
 
     Sphere* sphBrz = new Sphere(ellipse_c, ellipse_r);
-    sphBrz->setMaterial(bronze);
+    sphBrz->setMaterial(bronzeR);
 
     Instance *e1 = new Instance(sphBrz);
     e1->scale(2.5, 2.5, 2.5);
@@ -326,7 +327,7 @@ int main(int argc, const char *argv[])
                     ray.D.set(ray_dir);
                     ray.D.normalise();
 
-                    sample = scene->raytrace(ray,6);
+                    sample = scene->raytrace(ray, 2);
                     total.add(sample);
                 }
             }

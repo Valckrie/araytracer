@@ -84,6 +84,23 @@ Material::Material(int id) {
             kt.green = 0.0;
             kt.blue = 0.0;
         break;
+        case 2:
+            ka.red = 0.2125;
+            ka.green = 0.1275;
+            ka.blue = 0.054;
+            kd.red = 0.714;
+            kd.green = 0.4284;
+            kd.blue = 0.18144;
+            kr.red =  0.393548;
+            kr.green = 0.271906;
+            kr.blue = 0.166721;
+            ks.red = 0.393548;
+            ks.green =  0.271906;
+            ks.blue = 0.166721;
+            kt.red = 0.0;
+            kt.green = 0.0;
+            kt.blue = 0.0;
+        break;
     }
     n = 400.0;
 }

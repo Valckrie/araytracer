@@ -50,6 +50,18 @@ void Colour::add(Colour c) {
     blue += c.blue;
 }
 
+void Colour::multiply(Colour c) {
+    red *= c.red;
+    green *= c.green;
+    blue *= c.blue;
+}
+
+void Colour::multiply(float scalar) {
+    red *= scalar;
+    green *= scalar;
+    blue *= scalar;
+}
+
 Colour Colour::divide(float scalar) {
     red = red / scalar;
     green = green / scalar;
