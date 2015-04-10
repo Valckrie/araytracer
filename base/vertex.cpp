@@ -45,6 +45,14 @@ Vector Vertex::subtract (Vertex v) {
     return Vector(x - v.x, y - v.y, z - v.z);
 }
 
+Vector Vertex::add (Vertex v) {
+    return Vector(x + v.x, y + v.y, z + v.z);
+}
+
+Vertex Vertex::addVector (Vector v) {
+    return Vertex(x + v.x, y + v.y, z + v.z);
+}
+
 double Vertex::distance(Vertex& p) {
     return (sqrt(   (x - p.x) * (x - p.x) 
                 +   (y - p.y) * (y - p.y)
