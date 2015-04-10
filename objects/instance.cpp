@@ -151,6 +151,28 @@ Instance::intersect(Ray& ray, Hit *hit) {
 	return (false);   
 }
 
+bool Instance::shadow_hit(Ray& ray, Hit *sh) {
+    
+    // cout << "INSTANCE HITTING" << "\n";
+    // copy ray to new inverted ray
+    Ray inv_ray = ray;  
+
+    // inverse ray origin = inv matrix dot product original ray origin
+    inv_ray.P = inv_matrix * inv_ray.P;   
+    inv_ray.D = inv_matrix * inv_ray.D;
+                
+    if (object_ptr->shadow_hit(inv_ray, sh)) {
+                        
+        if (object_ptr->getMaterial())
+            obj_mat = object_ptr->getMaterial(); 
+            
+        // if (!transform_the_texture) 
+
+        return (true);
+    } 
+
+    return (false);   
+}
 
 //-------------------------------------------------------------------------------- scale
 

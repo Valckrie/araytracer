@@ -142,7 +142,8 @@ Colour Scene::raytrace(Ray &ray, int level) {
             // check for shadow intersections
             Object *obj2;
             // LOCATION IS LIGHT LOCATION< PASS IN AS PARAMETER
-            Vertex location (10, 10, 0, 1);
+            Vertex location = lt->getLocation();
+            // Vertex location (10, 10, 0, 1);
 
             float shadowt;
             float d = location.distance(ray.P);

@@ -18,6 +18,8 @@ class Light {
 		
 		bool cast_shadows();
 		virtual void getLightProperties(Vertex &pos, Vector *ldir, Colour *i);
+        Vertex getLocation(){};
+
 };
 
 #endif

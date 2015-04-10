@@ -47,3 +47,7 @@ bool PointLight::in_shadow(Ray& ray, Hit *hit) {
                                                         
     // return (false);     
 }
+
+Vertex PointLight::getLocation() {
+    return point;
+}

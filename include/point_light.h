@@ -18,6 +18,7 @@ class PointLight: public Light {
         virtual void getLightProperties(Vertex &pos, Vector *ldir, Colour *i);
         void setLumScale(float ls);
         bool in_shadow(Ray &ray, Hit* hit);
+        Vertex getLocation();
 };
 
 #endif
