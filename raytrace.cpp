@@ -157,7 +157,7 @@ int main(int argc, const char *argv[])
     // scene->addLight(*dir_light1);
 
     // POINT LIGHT
-    Vertex point_light_pos (-10, 10, 0, 1.0);
+    Vertex point_light_pos (10, 10, 0, 1.0);
     PointLight *pt_light1 = new PointLight(point_light_pos, col_white);
     pt_light1->setLumScale(2.0);
     pt_light1->turn_shadows(1);

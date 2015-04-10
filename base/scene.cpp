@@ -45,6 +45,8 @@ Colour Scene::raytrace(Ray &ray, int level) {
 
     // TEST EACH OBJECT AGAINST RAY, FIND THE CLOSEST
 
+    // iterate through objects
+
     t = kHugeValue; // a long way aways
     closest = (Object *)0;
     obj = obj_list;
@@ -62,7 +64,10 @@ Colour Scene::raytrace(Ray &ray, int level) {
         obj = obj->next();
     }
 
+    // colour = black (background colour, havent set option)
     col.clear();
+
+
 
     if (closest != (Object *)0) {
         lt = light_list;
@@ -76,92 +81,40 @@ Colour Scene::raytrace(Ray &ray, int level) {
         Colour kt = closest->obj_mat->kt;
         Ray sray;
 
+        // regardless of light, ambient colours
+        col.red     += ka.red;
+        col.green   += ka.green;
+        col.blue    += ka.blue;
 
         while (lt != (Light *)0) {
             Vector ldir;
             Vector xldir;
             Colour lcol;
 
-            // add shadow test here
-
-// == calculate diffuse component
-
+            // set light properties
             lt->getLightProperties(position, &xldir, &lcol);
             xldir.normalise();
-            float dlc = xldir.dot(normal);
-            if (dlc < 0.0) {
-                dlc = 0.0;
-            }
 
-// == calculate specular component here
-            float slc = 0.0;
+            // add shadow test here
 
-            // ndotwi = dlc        // diffuse component
-            // wi = xldir          // light direction
-            // wo = xldir reversed // ray direction reversed 
-
-            Vector wi = xldir;
-            Vector wo = ray.D.negative();
-            // float ndotwi = sr.normal * wi;
-            float ndotwi = wi.dot(normal);
-
-            // mirror reflection direction
-            // Vector3D r(-wi + 2.0 * sr.normal * ndotwi);
-
-            // Vector r = wi.negative() + 2.0 * normal * ndotwi;
-                // --- vector = vector + vector <-2.0 multiply [vector]// vector mult float [returns vector];
-            Vector r = wi.negative().add(normal.multiply(ndotwi).multiply(2.0));
-            
-
-            // float rdotwo = r * wo;        
-            float rdotwo = r.dot(wo);
-            rdotwo = pow(rdotwo, 37);
-
-            // if (rdotwo > 0.0) {
-            //     L = ks * cs * pow(rdotwo, exp);
-            //     L = ks * cs * pow(rdotwo, 20);
-            // }
-
-            // cout << "R" << rdotwo << "\n" ;
-
-            if(rdotwo > 0.0) {
-                slc = rdotwo;
-            }
-
-            // float slc = rdotwo;
-            // if (slc < 0.0) {
-            //     slc = 0.0;
-            // }
-
-// shadow part
-
-
-
-            // cout << "reach pre shadow";
-
-            // check for shadow intersections
+            // by default, not in a shadow
+            bool in_shadow = false;
             Object *obj2;
-            // LOCATION IS LIGHT LOCATION< PASS IN AS PARAMETER
             Vertex location = lt->getLocation();
             // Vertex location (10, 10, 0, 1);
-
             float shadowt;
-            float d = location.distance(ray.P);
-            
+            float d = location.distance(ray.P);       
 
-            bool in_shadow = false;
-
+// check for shadow intersections
 
             Ray shadowray(position, xldir);
-
             Hit shadowhit;
-
+            
             if(lt->cast_shadows()) {
                 obj2 = obj_list;
                 while (obj2 != (Object *)0) {
                     if(obj2->shadow_hit(shadowray, &shadowhit)) {
                         // cout << "\n chklpoint 1";
-
                         if(shadowhit.t < d) {
                             in_shadow = true;
                         }
@@ -169,27 +122,45 @@ Colour Scene::raytrace(Ray &ray, int level) {
                     }
                     obj2 = obj2->next();
                 }
-                // false
+                // in_shadow stays false
             }
 
-// orig shadow func
-            // bool in_shadow = false;
-            // if(lt->cast_shadows()) {
-            //     Ray shadowray(position, xldir);
-            //     in_shadow = shadowtrace(shadowray, 10);
-            // }
-
-// combine components
-            // cout << in_shadow ;
-            col.red     += ka.red;
-            col.green   += ka.green;
-            col.blue    += ka.blue;
             if(in_shadow == false) {
+                // == calculate diffuse component
+                float dlc = xldir.dot(normal);
+                if (dlc < 0.0) {
+                    dlc = 0.0;
+                }
+                // == calculate specular component here
+
+                // ndotwi = dlc        // diffuse component
+                // wi = xldir          // light direction
+                // wo = xldir reversed // ray direction reversed 
+
+                Vector wi = xldir;
+                Vector wo = ray.D.negative();
+                // float ndotwi = sr.normal * wi;
+                float ndotwi = wi.dot(normal);
+
+                // mirror reflection direction
+                // Vector r(-wi + 2.0 * sr.normal * ndotwi);
+
+                Vector r = wi.negative().add(normal.multiply(ndotwi).multiply(2.0));
+                
+                // float rdotwo = r * wo;        
+                float rdotwo = r.dot(wo);
+                rdotwo = pow(rdotwo, 37);
+
+                float slc = rdotwo;
+                if (slc < 0.0) {
+                    slc = 0.0;
+                }
+
+                // combine components
                 col.red     += lcol.red *    (dlc * kd.red   + slc * ks.red);
                 col.green   += lcol.green *  (dlc * kd.green + slc * ks.green);
                 col.blue    += lcol.blue *   (dlc * kd.blue  + slc * ks.blue);
             }
-
             lt = lt->next(); // next light
         }
 
