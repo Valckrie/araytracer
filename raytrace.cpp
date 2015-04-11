@@ -129,7 +129,7 @@ int main(int argc, const char *argv[])
     int x,y;
     // int n;
 
-    int samplesize = 25;
+    int samplesize = 16;
     int ss = (int)sqrt( (float)samplesize);
     Vertex samplepixel;
 
@@ -147,21 +147,23 @@ int main(int argc, const char *argv[])
     col_white.set(1.0,1.0,1.0,1.0);
 
     Camera* cam = new Camera();
-    cam->set_eye(0, 10, 10, 1);
+    cam->set_eye(0, 10, 25, 1);
     cam->set_lookat(0, 5, 0, 1);
     cam->compute_uvw();
 
     // Create and add a directional light to the scene
     Vector dir_light_dir(-1.0, -1.0, 0.0);
     DirectionalLight *dir_light1 = new DirectionalLight(dir_light_dir, col_white);
-    // scene->addLight(*dir_light1);
+    dir_light1->turn_shadows(1);
+    scene->addLight(*dir_light1);
+
 
     // POINT LIGHT
     Vertex point_light_pos (10, 10, 0, 1.0);
     PointLight *pt_light1 = new PointLight(point_light_pos, col_white);
     pt_light1->setLumScale(2.0);
     pt_light1->turn_shadows(1);
-    scene->addLight(*pt_light1);
+    // scene->addLight(*pt_light1);
 
     // POINT LIGHT SPHERE MARKER
     float marker_radius = 0.5;
@@ -287,7 +289,7 @@ int main(int argc, const char *argv[])
     // scene->addObject(*tri1);
 
     OpenCylinder *opencylinder1 = new OpenCylinder(0, 1, 2.2);
-    opencylinder1->setMaterial(grayR);
+    opencylinder1->setMaterial(silverR);
 
     Instance *oc1 = new Instance(opencylinder1);
     // oc1->rotate_z(-60);
