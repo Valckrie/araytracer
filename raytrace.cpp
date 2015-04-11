@@ -219,7 +219,10 @@ int main(int argc, const char *argv[])
     sphereBlue->setMaterial(specB);
 
     Sphere* sphBrz = new Sphere(ellipse_c, ellipse_r);
-    sphBrz->setMaterial(transp);
+    sphBrz->setMaterial(bronzeR);
+
+    Sphere* sphTransp = new Sphere(ellipse_c, ellipse_r);
+    sphTransp->setMaterial(transp);
 
     Sphere* sphG = new Sphere(ellipse_c, ellipse_r);
     sphG->setMaterial(grayR);
@@ -233,7 +236,7 @@ int main(int argc, const char *argv[])
     e1->translate(0, 0, 0);
     scene->addObject(*e1);
 
-    Instance *e11 = new Instance(sphBrz);
+    Instance *e11 = new Instance(sphTransp);
     e11->scale(3, 3, 3);
     e11->rotate_y(0);
     e11->translate(0, 6, 0);
