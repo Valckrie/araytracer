@@ -12,7 +12,7 @@ class Plane: public Object {
 		Vector getNormal();
 		Vertex getPoint();
 		bool intersect(Ray &ray, Hit *h);
-		bool shadow_hit(Ray &ray, Hit *sh);
+		bool shadow_hit(Ray &ray, double &sh);
 
 		static const double kEpsilon;   // for shadows and secondary rays
 };

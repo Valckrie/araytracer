@@ -114,7 +114,7 @@ bool OpenCylinder::intersect(Ray& ray, Hit *hit) {
     return (false);         
 }
 
-// bool OpenCylinder::shadow_hit(Ray& ray, Hit *hit) {
+// bool OpenCylinder::shadow_hit(Ray& ray, double sh) {
                                                             
 //     double t;
 //     double ox = ray.P.x;

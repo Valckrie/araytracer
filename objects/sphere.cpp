@@ -108,7 +108,7 @@ bool Sphere::intersect(Ray &ray, Hit *hit)
     return true;
 }
 
-bool Sphere::shadow_hit(Ray &ray, Hit *sh) {
+bool Sphere::shadow_hit(Ray &ray, double &sh) {
     // cout << "Sphere Shadow Hit" << "\n";
     Vector ro;
 
@@ -151,13 +151,13 @@ bool Sphere::shadow_hit(Ray &ray, Hit *sh) {
     if (t0 < kEpsilon) {
 
         // hit->t = t1;
-        sh->t = t1;
+        sh = t1;
 
         return true;
     } else {
 
         // hit->t = t0;
-        sh->t = t0;
+        sh = t0;
 
         return true;
     }

@@ -151,7 +151,7 @@ Instance::intersect(Ray& ray, Hit *hit) {
 	return (false);   
 }
 
-bool Instance::shadow_hit(Ray& ray, Hit *sh) {
+bool Instance::shadow_hit(Ray& ray, double &sh) {
     
     // cout << "INSTANCE HITTING" << "\n";
     // copy ray to new inverted ray

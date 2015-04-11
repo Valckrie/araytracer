@@ -59,12 +59,12 @@ bool Plane::intersect(Ray &ray, Hit *hit) {
     return(false);
 }
 
-bool Plane::shadow_hit(Ray& ray, Hit * sh) {  
+bool Plane::shadow_hit(Ray& ray, double &sh) {  
     // float t = (a - ray.o) * n / (ray.d * n);
     float t = point.subtract(ray.P).dot(normal) / ray.D.dot(normal);
                                 
     if (t > kEpsilon) {
-        sh->t = t;
+        sh = t;
         return (true);  
     }
     else

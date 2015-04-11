@@ -155,7 +155,7 @@ int main(int argc, const char *argv[])
     Vector dir_light_dir(-1.0, -1.0, 0.0);
     DirectionalLight *dir_light1 = new DirectionalLight(dir_light_dir, col_white);
     dir_light1->turn_shadows(1);
-    scene->addLight(*dir_light1);
+    // scene->addLight(*dir_light1);
 
 
     // POINT LIGHT
@@ -163,7 +163,7 @@ int main(int argc, const char *argv[])
     PointLight *pt_light1 = new PointLight(point_light_pos, col_white);
     pt_light1->setLumScale(2.0);
     pt_light1->turn_shadows(1);
-    // scene->addLight(*pt_light1);
+    scene->addLight(*pt_light1);
 
     // POINT LIGHT SPHERE MARKER
     float marker_radius = 0.5;

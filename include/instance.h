@@ -35,7 +35,7 @@ class Instance: public Object {
 		bool intersect(Ray& ray, Hit *hit);
 		
 		//
-		bool shadow_hit(Ray &ray, Hit *sh);
+		bool shadow_hit(Ray &ray, double &sh);
 		
 		// affine tranformation functions
 		
