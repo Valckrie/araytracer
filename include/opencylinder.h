@@ -20,7 +20,7 @@ class OpenCylinder: public Object {
                         
         bool intersect(Ray& ray, Hit *hit);
         
-        
+        bool shadow_hit(Ray& ray, double &sh);
 };
 
 #endif

@@ -25,8 +25,8 @@ void Scene::addLight(Light &lt)
   light_list = &lt;
 }
 
-Colour Scene::raytrace(Ray &ray, int level) {
-    float ta, t;
+Colour Scene::raytrace(Ray ray, int level) {
+    double ta, t;
     Colour col;
 
     Object *obj;
@@ -38,13 +38,19 @@ Colour Scene::raytrace(Ray &ray, int level) {
     Vertex position;
     Vector normal;
 
-    if (level == 0) {
+    int max_depth = 1;
+    int cur_depth = level;
+
+    int testvar;
+    testvar = 0;
+    // cout << "\n cur lvl : " << level << " max lvl " << max_depth;
+
+    if (level > max_depth) {
         col.clear();
         return col; // stop if recursed deep enough
     }
 
     // TEST EACH OBJECT AGAINST RAY, FIND THE CLOSEST
-
     // iterate through objects
 
     t = kHugeValue; // a long way aways
@@ -66,14 +72,15 @@ Colour Scene::raytrace(Ray &ray, int level) {
 
     // colour = black (background colour, havent set option)
     col.clear();
+    // col.set(0.5, 0.5, 1.0, 1.0);
 
-
-
+    // if ray hit an object
     if (closest != (Object *)0) {
         lt = light_list;
 
         Colour ocol;
 
+        // commence shading
         Colour ka = closest->obj_mat->ka;
         Colour kd = closest->obj_mat->kd;
         Colour ks = closest->obj_mat->ks;
@@ -102,20 +109,22 @@ Colour Scene::raytrace(Ray &ray, int level) {
             Object *obj2;
             Vertex location = lt->getLocation();
             // Vertex location (10, 10, 0, 1);
-            float shadowt;
-            float d = location.distance(ray.P);       
+            double shadowt;
+            double d = location.distance(ray.P);       
 
 // check for shadow intersections
 
             Ray shadowray(position, xldir);
-            Hit shadowhit;
-            
+            double shadowhit;
+
+            // cout << shadowhit << "\n";
+
             if(lt->cast_shadows()) {
                 obj2 = obj_list;
                 while (obj2 != (Object *)0) {
-                    if(obj2->shadow_hit(shadowray, &shadowhit)) {
+                    if(obj2->shadow_hit(shadowray, shadowhit)) {
                         // cout << "\n chklpoint 1";
-                        if(shadowhit.t < d) {
+                        if(shadowhit < d) {
                             in_shadow = true;
                         }
                         break;
@@ -126,32 +135,35 @@ Colour Scene::raytrace(Ray &ray, int level) {
             }
 
             if(in_shadow == false) {
+
                 // == calculate diffuse component
-                float dlc = xldir.dot(normal);
+
+                double dlc = xldir.dot(normal);
                 if (dlc < 0.0) {
                     dlc = 0.0;
                 }
-                // == calculate specular component here
 
-                // ndotwi = dlc        // diffuse component
-                // wi = xldir          // light direction
-                // wo = xldir reversed // ray direction reversed 
+                // == calculate specular component
 
-                Vector wi = xldir;
-                Vector wo = ray.D.negative();
-                // float ndotwi = sr.normal * wi;
-                float ndotwi = wi.dot(normal);
+                // normal_dot_light_dir = dlc           // diffuse component
+                // light_dir = xldir                    // light direction
+                // ray_dir_reversed = xldir reversed    // ray direction reversed 
+
+                Vector light_dir = xldir;
+                Vector ray_dir_reversed = ray.D.negative();
+                // double normal_dot_light_dir = sr.normal * light_dir;
+                double normal_dot_light_dir = light_dir.dot(normal);
 
                 // mirror reflection direction
-                // Vector r(-wi + 2.0 * sr.normal * ndotwi);
+                // Vector r(-light_dir + 2.0 * sr.normal * normal_dot_light_dir);
 
-                Vector r = wi.negative().add(normal.multiply(ndotwi).multiply(2.0));
+                Vector r = light_dir.negative().add(normal.multiply(normal_dot_light_dir).multiply(2.0));
                 
-                // float rdotwo = r * wo;        
-                float rdotwo = r.dot(wo);
-                rdotwo = pow(rdotwo, 37);
+                // double specular = r * ray_dir_reversed;        
+                double specular = r.dot(ray_dir_reversed);
+                specular = pow(specular, 37);
 
-                float slc = rdotwo;
+                double slc = specular;
                 if (slc < 0.0) {
                     slc = 0.0;
                 }
@@ -160,14 +172,124 @@ Colour Scene::raytrace(Ray &ray, int level) {
                 col.red     += lcol.red *    (dlc * kd.red   + slc * ks.red);
                 col.green   += lcol.green *  (dlc * kd.green + slc * ks.green);
                 col.blue    += lcol.blue *   (dlc * kd.blue  + slc * ks.blue);
+
+                // L += (  diffuse_brdf->f(sr, wo, wi) + 
+                //     specular_brdf->f(sr, wo, wi) ) * sr.w.lights[j]->L(sr) * ndotwi;
+
+                // l + (dlc * kd + slc * ks ) * lcol 
+                // the ndotwi is part of specularbrdf already but isnt part of diffuse brdf
+                // so thats why its there
             }
             lt = lt->next(); // next light
         }
 
-    // add reflected rays here
+        // cout << "COLOR : " << col.red << " " << col.green << " " << col.blue;
 
-    // add refracted rays here
+        // add reflected rays here
+        if(kr.red > 0.0 || kr.green > 0.0 || kr.blue > 0.0) {
+
+            // Vector ray_dir = ray.D;
+            // Vector n = normal;
+            // double ndotrdr = n.dot(ray_dir);
+            // Vector r = ray_dir.negative().add(n.multiply(ndotrdr).multiply(-2.0));
+
+
+            // pi + R * EPSILON
+            // if(level < max_depth) {
+
+            // }
+
+
+            // vector3 N = prim->GetNormal( pi );
+            // vector3 R = a_Ray.GetDirection() - 2.0f * DOT( a_Ray.GetDirection(), N ) * N;
+            // if (a_Depth < TRACEDEPTH) 
+            // {
+            //     Color rcol( 0, 0, 0 );
+            //     float dist;
+            //     Raytrace( Ray( pi + R * EPSILON, R ), rcol, a_Depth + 1, a_RIndex, dist );
+            //     a_Acc += refl * rcol * prim->GetMaterial()->GetColor();
+            // }
+
+
+            Vector ray_dir_reversed = ray.D.negative();
+            // Vector3D wo = -sr.ray.d;
+            Vector light_dir;
+            // Vector3D wi;
+
+            double ndotrdr = normal.dot(ray_dir_reversed);
+            // double ndotwo = sr.normal * wo;
+
+            light_dir = ray_dir_reversed.negative().add(normal.multiply(ndotrdr).multiply(2.0));
+            // wi = -wo + 2.0 * sr.normal * ndotwo; 
+
+            double rlc = fabs(normal.dot(light_dir));
+            Colour rlc_col = kr; rlc_col.multiply(rlc);
+            // Colour rlc_col = kr.divide(rlc);
+            // Colour rlc_col = kr;
+            // Colour rlc_col (rlc, rlc, rlc, 1.0);
+            // return (kr * cr / fabs(sr.normal * wi));
+
+            // const double ERR = 0.00000000001;
+            // Vector normalcopy;
+            // normalcopy.set(normal.x, normal.y, normal.z);
+            // Vector newr = normalcopy.multiply(ERR);
+            // Vertex poscopy = position;
+            // Vertex newp = poscopy.addVector(newr);
+
+            // cout << "\n pos " << position.x << " "<< position.y <<" " << position.z;
+            // Ray reflected_ray(position.addVector(light_dir.multiply(0.000000000001)), light_dir);
+
+            // .multiply causes perma effect?
+
+            testvar += 1;
+            // cout << "\n testvar : " <<testvar ;
+
+            // Vector normal3;
+            // Vector normal4;
+            // Vector normal5;
+            // Vector normal6;
+            // Vector normal7;
+            // Vector normal2 = normal.multiply(0.001);
+            Vertex adjust = position.addVector(normal.multiply(0.001));
+            // Ray reflected_ray(position, light_dir);
+            Ray reflected_ray(adjust, light_dir);
+            // Ray reflected_ray(sr.hit_point, wi);
+
+            // reflected_ray.depth = cur_depth + 1;
+            // reflected_ray.depth = sr.depth + 1;
+        
+            double normal_dot_light_dir = light_dir.dot(normal);
+            // col.add(rlc_col);
+
+            // Colour recursive = raytrace(reflected_ray, cur_depth + 1);
+            // rlc_col.multiply(recursive);
+            // col.add(rlc_col);
+
+            // if(level != 0) cout << "\n cur lvl : " << cur_depth << " max lvl " << max_depth;
+
+            rlc_col.multiply(raytrace(reflected_ray, cur_depth + 1));
+            rlc_col.multiply(normal_dot_light_dir);
+
+            // if(level != 0) cout << "\n DEPTH " << level << " COLOR : " << rlc_col.red << " " << rlc_col.green << " " << rlc_col.blue;
+
+            col.add(rlc_col);
+
+            // col.add(Colour(0.1,0.1,0.1,1.0));
+            // col.multiply(raytrace(reflected_ray, cur_depth + 1));
+            // col.red     += (kr.red / rlc);
+            // col.green   += (kr.green / rlc);
+            // col.blue    += (kr.blue / rlc);
+        }
+
+        
+
+        // add refracted rays here
+    } else {
+        // no object hit. return background color
+        col.set(0.5, 0.5, 1.0, 1.0);
     }
+
+    // otherwise just return col, which is black, (bg col)
     return col;
 }
 
@@ -187,8 +309,8 @@ bool shadowtrace(Ray &ray, double tlimit)
     // LOCATION IS LIGHT LOCATION< PASS IN AS PARAMETER
     Vertex location (10, 10, 0, 1);
 
-    float t;
-    float d = location.distance(ray.P);
+    double t;
+    double d = location.distance(ray.P);
 
     closest = (Object *)0;
     obj = obj_list;
@@ -202,9 +324,9 @@ bool shadowtrace(Ray &ray, double tlimit)
     */
 
     /*
-    float t;
+    double t;
     int numObjects = sr.w.objects.size();
-    float d = location.distance(ray.o);
+    double d = location.distance(ray.o);
                                                         
     for (int j = 0; j < num_objects; j++)
         if (sr.w.objects[j]->shadow_hit(ray, t) && t < d)
