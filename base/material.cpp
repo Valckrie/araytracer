@@ -3,6 +3,7 @@
 #include "include/material.h"
 
 Material::Material(void) {
+    // gray matte
     ka.red = 0.3;
     ka.green = 0.3;
     ka.blue = 0.3;
@@ -19,9 +20,11 @@ Material::Material(void) {
     kt.green = 0.0;
     kt.blue = 0.0;
     n = 400.0;
+    type = 0;
 }
 
 Material::Material(double R, double G, double B) {
+    // specular RGB
     ka.red = R;
     ka.green = G;
     ka.blue = B;
@@ -38,6 +41,7 @@ Material::Material(double R, double G, double B) {
     kt.green = 0.0;
     kt.blue = 0.0;
     n = 400.0;
+    type = 1;
 }
 
 Material::Material(double R, double G, double B, double SPEC) {
@@ -68,6 +72,7 @@ void Material::copySpecular() {
 Material::Material(int id) {
     switch(id) {
         case 1:
+            // specular bronze
             ka.red = 0.2125;
             ka.green = 0.1275;
             ka.blue = 0.054;
@@ -83,8 +88,10 @@ Material::Material(int id) {
             kt.red = 0.0;
             kt.green = 0.0;
             kt.blue = 0.0;
+            type = 2;
         break;
         case 2:
+            // reflective bronze
             ka.red = 0.2125;
             ka.green = 0.1275;
             ka.blue = 0.054;
@@ -100,8 +107,10 @@ Material::Material(int id) {
             kt.red = 0.0;
             kt.green = 0.0;
             kt.blue = 0.0;
+            type = 3;
         break;
         case 3:
+            // reflective
             ka.red = 0.3;
             ka.green = 0.3;
             ka.blue = 0.3;
@@ -118,6 +127,7 @@ Material::Material(int id) {
             kt.green = 0.0;
             kt.blue = 0.0;
             n = 400.0;
+            type = 3;
         break;
         case 4:             // silver
             ka.red = 0.19225;
@@ -136,6 +146,7 @@ Material::Material(int id) {
             kt.green = 0.0;
             kt.blue = 0.0;
             n = 400.0;
+            type = 3;
         break;
         case 5:             // transp
             ka.red = 0.3;
@@ -155,6 +166,27 @@ Material::Material(int id) {
             kt.blue = 0.9;
             n = 400.0;
             ior = 1;
+            type = 4;
+        break;
+        case 99:             // checker
+            float z = 0.5;
+            ka.red = z;
+            ka.green = z;
+            ka.blue = z;
+            kd.red = z;
+            kd.green = z;
+            kd.blue = z;
+            kr.red =  0.0;
+            kr.green = 0.0;
+            kr.blue = 0.0;
+            ks.red = 0.0;
+            ks.green =  0.0;
+            ks.blue = 0.0;
+            kt.red = 0.0;
+            kt.green = 0.0;
+            kt.blue = 0.0;
+            n = 400.0;
+            type = 99;
         break;
     }
     n = 400.0;

@@ -12,6 +12,8 @@ class Material {
     Colour kt;              // transmission / refraction
     double n;
     double ior;
+    int type;
+    // 1 matte, 2 specular, 3 reflective, 4 transparent
     Material(void);
     Material(double R, double G, double B);
     Material(double R, double G, double B, double SPEC);
