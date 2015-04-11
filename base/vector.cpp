@@ -55,11 +55,16 @@ Vector Vector::crossProduct(Vector v) {
 
 Vector Vector::subtract (Vector v) {
     return Vector (x - v.x, y - v.y, z - v.z);
-  }
+}
 
 Vector Vector::multiply (double scalar) {
     return Vector (x*scalar, y*scalar, z*scalar);
-  }
+}
+
+
+Vector Vector::divide (double scalar) {
+    return Vector (x / scalar, y / scalar, z / scalar);
+}
 
 Vector Vector::add (Vector v) {
   return Vector (x + v.x, y + v.y, z + v.z);

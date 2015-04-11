@@ -11,6 +11,7 @@ class Material {
     Colour kr;              // reflection
     Colour kt;              // transmission / refraction
     double n;
+    double ior;
     Material(void);
     Material(double R, double G, double B);
     Material(double R, double G, double B, double SPEC);

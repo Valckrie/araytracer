@@ -19,6 +19,7 @@ class Vector {
 	Vector crossProduct(Vector v);
 	Vector subtract (Vector v);
 	Vector multiply (double scalar);
+	Vector divide (double scalar);
 	Vector add(Vector v);
 	Vector negative();
 

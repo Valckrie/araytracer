@@ -190,6 +190,7 @@ int main(int argc, const char *argv[])
     Material *bronzeR = new Material(2);
     Material *grayR = new Material(3);
     Material *silverR = new Material(4);
+    Material *transp = new Material(5);
 
     Plane *ground;
     Vertex ground_point(0, -5, 0, 1);
@@ -218,7 +219,7 @@ int main(int argc, const char *argv[])
     sphereBlue->setMaterial(specB);
 
     Sphere* sphBrz = new Sphere(ellipse_c, ellipse_r);
-    sphBrz->setMaterial(bronzeR);
+    sphBrz->setMaterial(transp);
 
     Sphere* sphG = new Sphere(ellipse_c, ellipse_r);
     sphG->setMaterial(grayR);
