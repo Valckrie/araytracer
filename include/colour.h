@@ -7,7 +7,10 @@ public:
   float green;
   float blue;
   float alpha;
+  
   Colour(void);
+  Colour(float pred, float pgreen, float pblue, float palpha);
+
   void clear(void);
   void set(float pred, float pgreen, float pblue, float palpha);
   float getRed(void);

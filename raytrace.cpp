@@ -129,7 +129,7 @@ int main(int argc, const char *argv[])
     int x,y;
     // int n;
 
-    int samplesize = 1;
+    int samplesize = 25;
     int ss = (int)sqrt( (float)samplesize);
     Vertex samplepixel;
 
@@ -147,7 +147,7 @@ int main(int argc, const char *argv[])
     col_white.set(1.0,1.0,1.0,1.0);
 
     Camera* cam = new Camera();
-    cam->set_eye(0, 10, 25, 1);
+    cam->set_eye(0, 10, 10, 1);
     cam->set_lookat(0, 5, 0, 1);
     cam->compute_uvw();
 
@@ -186,12 +186,14 @@ int main(int argc, const char *argv[])
     Material *matteG = new Material(0.2, 0.2, 0.8, 0.0);
     Material *bronze = new Material(1);
     Material *bronzeR = new Material(2);
+    Material *grayR = new Material(3);
+    Material *silverR = new Material(4);
 
     Plane *ground;
     Vertex ground_point(0, -5, 0, 1);
     Vector ground_normal(0, 1, 0);
     ground = new Plane(ground_point, ground_normal);
-    ground->setMaterial(bronzeR);
+    ground->setMaterial(grayMaterial);
     scene->addObject(*ground);
 
 
@@ -202,10 +204,10 @@ int main(int argc, const char *argv[])
     ellipse->setMaterial(grayMaterial);
 
     Sphere* sphereGreen = new Sphere(ellipse_c, ellipse_r);
-    sphereGreen->setMaterial(specG);
+    sphereGreen->setMaterial(silverR);
 
     Sphere* sphereSpec = new Sphere(ellipse_c, ellipse_r);
-    sphereSpec->setMaterial(newMaterial);
+    sphereSpec->setMaterial(silverR);
 
     Sphere* sphereRed = new Sphere(ellipse_c, ellipse_r);
     sphereRed->setMaterial(specR);
@@ -216,47 +218,59 @@ int main(int argc, const char *argv[])
     Sphere* sphBrz = new Sphere(ellipse_c, ellipse_r);
     sphBrz->setMaterial(bronzeR);
 
+    Sphere* sphG = new Sphere(ellipse_c, ellipse_r);
+    sphG->setMaterial(grayR);
+
+    Sphere* sphSilv = new Sphere(ellipse_c, ellipse_r);
+    sphSilv->setMaterial(silverR);
+
     Instance *e1 = new Instance(sphBrz);
     e1->scale(2.5, 2.5, 2.5);
     e1->rotate_y(0);
     e1->translate(0, 0, 0);
     scene->addObject(*e1);
 
-    Instance *sphgray = new Instance(ellipse);
+    Instance *e11 = new Instance(sphBrz);
+    e11->scale(3, 3, 3);
+    e11->rotate_y(0);
+    e11->translate(0, 6, 0);
+    scene->addObject(*e11);
+
+    Instance *sphgray = new Instance(sphG);
     sphgray->scale(2.5, 2.5, 2.5);
     sphgray->rotate_y(0);
     sphgray->translate(7, -3.5, 0);
-    // scene->addObject(*sphgray);
+    scene->addObject(*sphgray);
 
-    Instance *e2 = new Instance(ellipse);
+    Instance *e2 = new Instance(sphG);
     e2->scale(2.3, 2.3, 2.3);
     e2->rotate_y(0);
     e2->translate(5, 0, -15);
-    // scene->addObject(*e2);
+    scene->addObject(*e2);
 
     Instance *e3 = new Instance(sphereSpec);
     e3->scale(2, 2, 2);
     e3->rotate_y(0);
     e3->translate(5, 1, 4.2);
-    // scene->addObject(*e3);
+    scene->addObject(*e3);
 
     Instance *e4 = new Instance(sphereRed);
     e4->scale(1.5, 1.5, 1.5);
     e4->rotate_y(0);
     e4->translate(7, -4, 6);
-    // scene->addObject(*e4);   
+    scene->addObject(*e4);   
 
-    Instance *e5 = new Instance(sphereBlue);
+    Instance *e5 = new Instance(sphBrz);
     e5->scale(1.5, 1.5, 1.5);
     e5->rotate_y(0);
     e5->translate(0, -5, 0);
-    // scene->addObject(*e5);
+    scene->addObject(*e5);
 
     Instance *e6 = new Instance(sphereGreen);
     e6->scale(1.5, 1.5, 1.5);
     e6->rotate_y(0);
     e6->translate(0, 0, 0);
-    // scene->addObject(*e6);
+    scene->addObject(*e6);
 
     Instance *e7 = new Instance(sphereBlue);
     e7->scale(1.5, 1.5, 1.5);
@@ -273,14 +287,14 @@ int main(int argc, const char *argv[])
     // scene->addObject(*tri1);
 
     OpenCylinder *opencylinder1 = new OpenCylinder(0, 1, 2.2);
-    opencylinder1->setMaterial(newMaterial);
+    opencylinder1->setMaterial(grayR);
 
     Instance *oc1 = new Instance(opencylinder1);
     // oc1->rotate_z(-60);
     // oc1->rotate_y(-60);
     oc1->scale(1, 8.5, 1);
     oc1->translate(-5, -5, -5);
-    // scene->addObject(*oc1);
+    scene->addObject(*oc1);
 
     // for (int i = 0; i < 10; i++) {
     //     addSphere(scene, p1, rad1);
@@ -300,6 +314,10 @@ int main(int argc, const char *argv[])
             Colour avg;
             Colour sample;
 
+            // double samplex = (((float)x)/XSIZE) - 0.5;
+            // double sampley = (((float)y)/XSIZE) - 0.5;
+            // cout << "ORIGX " << samplex << " ORIGY " << sampley << "\n";
+
             for(int i = 0; i < ss; i++) {           // up sample
                 for(int j = 0; j < ss; j++) {       // across sample
 
@@ -308,17 +326,15 @@ int main(int argc, const char *argv[])
 
 
 
-
-                    samplepixel.x = (float)x - 0.5 * XSIZE + (j + 0.5) / ss;
-                    samplepixel.x = (samplepixel.x / XSIZE);
-                    samplepixel.y = (float)y - 0.5 * XSIZE + (i + 0.5) / ss;
-                    samplepixel.y = (samplepixel.y / XSIZE);
+                    samplepixel.x = (double)x - 0.5 * XSIZE + (j + 0.5) / ss;
+                    samplepixel.x = (double)(samplepixel.x / XSIZE);
+                    samplepixel.y = (double)y - 0.5 * XSIZE + (i + 0.5) / ss;
+                    samplepixel.y = (double)(samplepixel.y / XSIZE);
                     
                     // samplepixel.x = ((float)x/XSIZE) - 0.5 * XSIZE + (j + 0.5) / ss;
                     // samplepixel.y = ((float)y/YSIZE) - 0.5 * YSIZE + (i + 0.5) / ss;
 
-                    // cout << "ss.x " << samplepixel.x;
-                    // cout << " ss.y " << samplepixel.y << "\n";
+                    // cout << "AASSx " << samplepixel.x << " AASSy " << samplepixel.y << "\n";
 
                     Ray ray;
 
@@ -333,7 +349,8 @@ int main(int argc, const char *argv[])
             }
 
             avg = total.divide(samplesize);
-            
+            // avg = total;
+
             // Ray ray;
             // double normalized_x = (((float)x)/XSIZE)-0.5;
             // double normalized_y = (((float)y)/YSIZE)-0.5;

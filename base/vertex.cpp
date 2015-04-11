@@ -41,6 +41,10 @@ void Vertex::set(Vertex v)
   w = v.w;
 }
 
+Vertex Vertex::returnMultiply(float f) {
+    return Vertex(x * f, y * f, z * f, 1.0);
+}
+
 Vector Vertex::subtract (Vertex v) {
     return Vector(x - v.x, y - v.y, z - v.z);
 }

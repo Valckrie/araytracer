@@ -1,11 +1,19 @@
 #include "include/colour.h"
 
-Colour::Colour()
+Colour::Colour(void)
 {
     red   = 0.0;
     green = 0.0;
     blue  = 0.0;
     alpha = 0.0;
+}
+
+Colour::Colour(float pred, float pgreen, float pblue, float palpha)
+{
+    red   = pred;
+    green = pgreen;
+    blue  = pblue;
+    alpha = palpha;
 }
 
 void Colour::clear(void)

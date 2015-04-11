@@ -101,6 +101,42 @@ Material::Material(int id) {
             kt.green = 0.0;
             kt.blue = 0.0;
         break;
+        case 3:
+            ka.red = 0.3;
+            ka.green = 0.3;
+            ka.blue = 0.3;
+            kd.red = 0.3;
+            kd.green = 0.3;
+            kd.blue =0.3;
+            kr.red =  0.3;
+            kr.green = 0.3;
+            kr.blue = 0.3;
+            ks.red = 0.0;
+            ks.green =  0.0;
+            ks.blue = 0.0;
+            kt.red = 0.0;
+            kt.green = 0.0;
+            kt.blue = 0.0;
+            n = 400.0;
+        break;
+        case 4:             // silver
+            ka.red = 0.19225;
+            ka.green = 0.19225;
+            ka.blue = 0.19225;
+            kd.red = 0.50754 ;
+            kd.green = 0.50754 ;
+            kd.blue = 0.50754 ;
+            kr.red =  0.508273;
+            kr.green = 0.508273;
+            kr.blue = 0.508273;
+            ks.red = 0.508273;
+            ks.green =  0.508273;
+            ks.blue = 0.508273;
+            kt.red = 0.0;
+            kt.green = 0.0;
+            kt.blue = 0.0;
+            n = 400.0;
+        break;
     }
     n = 400.0;
 }

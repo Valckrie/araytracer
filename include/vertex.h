@@ -19,6 +19,7 @@ class Vertex {
 	Vector add (Vertex v);
 	Vertex addVector (Vector v);
 	double distance(Vertex &p);
+	Vertex returnMultiply(float f);
 };
 
 Vertex operator* (const Matrix& mat, const Vertex& p);
