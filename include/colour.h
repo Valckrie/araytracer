@@ -19,7 +19,8 @@ public:
   float getAlpha(void);
 
   void add(Colour c);
-  Colour divide(float scalar);
+  Colour changeDivide(float scalar);
+  Colour returnDivide(float scalar);
   void multiply(Colour c);
   void multiply(float scalar);
   void scaleLuminance(float scalar);

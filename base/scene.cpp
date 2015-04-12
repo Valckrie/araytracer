@@ -4,6 +4,9 @@
 #include "include/scene.h"
 #include "include/constants.h"
 using namespace std;
+
+const int MAX_DEPTH = 6 ;
+
 Scene::Scene()
 {
   scache = 0;
@@ -38,17 +41,23 @@ Colour Scene::raytrace(Ray ray, int level) {
     Vertex position;
     Vector normal;
 
-    int max_depth = 1;
     int cur_depth = level;
+
+    int highest_depth = 0;
 
     int testvar;
     testvar = 0;
     // cout << "\n cur lvl : " << level << " max lvl " << max_depth;
 
-    if (level > max_depth) {
+    if (level > MAX_DEPTH) {
         col.clear();
         return col; // stop if recursed deep enough
     }
+
+    // if(level > 1) {
+    //     highest_depth = level;
+    //     cout << "\nhighest depth reached : " << highest_depth ;
+    // }
 
     // TEST EACH OBJECT AGAINST RAY, FIND THE CLOSEST
     // iterate through objects
@@ -86,7 +95,35 @@ Colour Scene::raytrace(Ray ray, int level) {
         Colour ks = closest->obj_mat->ks;
         Colour kr = closest->obj_mat->kr;
         Colour kt = closest->obj_mat->kt;
+        double ior = closest->obj_mat->ior;
+        int exponent = closest->obj_mat->exponent;
+        int material_type = closest->obj_mat->type;
         Ray sray;
+
+
+        if (material_type == 99) {
+            // checkered/tile floor pattern
+            int square = (int)floor(position.x) + (int)floor(position.z);
+            if ((square % 2) == 0) {
+                // black tile
+                ka.red = 0.0;
+                ka.green = 0.0;
+                ka.blue = 0.0;
+                kd.red = 0.2;
+                kd.green = 0.2;
+                kd.blue = 0.2;
+            }
+            else {
+                // white tile
+                // ka.red = 1.0;
+                // ka.green = 1.0;
+                // ka.blue = 1.0;
+                // kd.red = 1.0;
+                // kd.green = 1.0;
+                // kd.blue = 1.0;
+            }
+        }
+
 
         // regardless of light, ambient colours
         col.red     += ka.red;
@@ -161,7 +198,7 @@ Colour Scene::raytrace(Ray ray, int level) {
                 
                 // double specular = r * ray_dir_reversed;        
                 double specular = r.dot(ray_dir_reversed);
-                specular = pow(specular, 37);
+                specular = pow(specular, exponent);
 
                 double slc = specular;
                 if (slc < 0.0) {
@@ -185,31 +222,11 @@ Colour Scene::raytrace(Ray ray, int level) {
 
         // cout << "COLOR : " << col.red << " " << col.green << " " << col.blue;
 
-        // add reflected rays here
-        if(kr.red > 0.0 || kr.green > 0.0 || kr.blue > 0.0) {
+// add reflected rays here
+        // if ((kr.red > 0.0 || kr.green > 0.0 || kr.blue > 0.0) &&
+        //     (kt.red == 0.0 && kt.green == 0.0 && kt.blue == 0.0)) {
 
-            // Vector ray_dir = ray.D;
-            // Vector n = normal;
-            // double ndotrdr = n.dot(ray_dir);
-            // Vector r = ray_dir.negative().add(n.multiply(ndotrdr).multiply(-2.0));
-
-
-            // pi + R * EPSILON
-            // if(level < max_depth) {
-
-            // }
-
-
-            // vector3 N = prim->GetNormal( pi );
-            // vector3 R = a_Ray.GetDirection() - 2.0f * DOT( a_Ray.GetDirection(), N ) * N;
-            // if (a_Depth < TRACEDEPTH) 
-            // {
-            //     Color rcol( 0, 0, 0 );
-            //     float dist;
-            //     Raytrace( Ray( pi + R * EPSILON, R ), rcol, a_Depth + 1, a_RIndex, dist );
-            //     a_Acc += refl * rcol * prim->GetMaterial()->GetColor();
-            // }
-
+        if(material_type == 3) {
 
             Vector ray_dir_reversed = ray.D.negative();
             // Vector3D wo = -sr.ray.d;
@@ -223,70 +240,149 @@ Colour Scene::raytrace(Ray ray, int level) {
             // wi = -wo + 2.0 * sr.normal * ndotwo; 
 
             double rlc = fabs(normal.dot(light_dir));
-            Colour rlc_col = kr; rlc_col.multiply(rlc);
-            // Colour rlc_col = kr.divide(rlc);
             // Colour rlc_col = kr;
-            // Colour rlc_col (rlc, rlc, rlc, 1.0);
+            // rlc_col.multiply(rlc);
+            Colour rlc_col = kr.returnDivide(rlc);
+
             // return (kr * cr / fabs(sr.normal * wi));
 
-            // const double ERR = 0.00000000001;
-            // Vector normalcopy;
-            // normalcopy.set(normal.x, normal.y, normal.z);
-            // Vector newr = normalcopy.multiply(ERR);
-            // Vertex poscopy = position;
-            // Vertex newp = poscopy.addVector(newr);
-
-            // cout << "\n pos " << position.x << " "<< position.y <<" " << position.z;
-            // Ray reflected_ray(position.addVector(light_dir.multiply(0.000000000001)), light_dir);
-
-            // .multiply causes perma effect?
-
-            testvar += 1;
-            // cout << "\n testvar : " <<testvar ;
-
-            // Vector normal3;
-            // Vector normal4;
-            // Vector normal5;
-            // Vector normal6;
-            // Vector normal7;
-            // Vector normal2 = normal.multiply(0.001);
             Vertex adjust = position.addVector(normal.multiply(0.001));
             // Ray reflected_ray(position, light_dir);
             Ray reflected_ray(adjust, light_dir);
             // Ray reflected_ray(sr.hit_point, wi);
 
-            // reflected_ray.depth = cur_depth + 1;
-            // reflected_ray.depth = sr.depth + 1;
-        
             double normal_dot_light_dir = light_dir.dot(normal);
-            // col.add(rlc_col);
-
-            // Colour recursive = raytrace(reflected_ray, cur_depth + 1);
-            // rlc_col.multiply(recursive);
-            // col.add(rlc_col);
-
             // if(level != 0) cout << "\n cur lvl : " << cur_depth << " max lvl " << max_depth;
 
             rlc_col.multiply(raytrace(reflected_ray, cur_depth + 1));
             rlc_col.multiply(normal_dot_light_dir);
 
             // if(level != 0) cout << "\n DEPTH " << level << " COLOR : " << rlc_col.red << " " << rlc_col.green << " " << rlc_col.blue;
-
             col.add(rlc_col);
-
-            // col.add(Colour(0.1,0.1,0.1,1.0));
-            // col.multiply(raytrace(reflected_ray, cur_depth + 1));
-            // col.red     += (kr.red / rlc);
-            // col.green   += (kr.green / rlc);
-            // col.blue    += (kr.blue / rlc);
         }
 
-        
+// end reflect
 
-        // add refracted rays here
+// add refracted rays here
+
+        // if(kt.red > 0.0 || kt.green > 0.0 || kt.blue > 0.0) {
+        if(material_type == 4) {
+            // if no work try avoid same var names
+
+            Vector ray_dir_reversed = ray.D.negative();
+            // Vector3D wo = -sr.ray.d;
+            Vector light_dir;
+            // Vector3D wi;
+            double ndotrdr = normal.dot(ray_dir_reversed);
+            light_dir = ray_dir_reversed.negative().add(normal.multiply(ndotrdr).multiply(2.0));
+            // wi = -wo + 2.0 * sr.normal * ndotwo; 
+            double rlc = fabs(normal.dot(light_dir));
+            Colour rlc_col = kr; rlc_col.multiply(rlc);
+            
+            Vertex adjust = position.addVector(normal.multiply(0.001));
+            Ray reflected_ray(adjust, light_dir);
+            double normal_dot_light_dir = light_dir.dot(normal);
+            // rlc_col.multiply(raytrace(reflected_ray, cur_depth + 1));
+            // rlc_col.multiply(normal_dot_light_dir);
+            // col.add(rlc_col);
+
+        // new part for refraction
+
+            bool total_internal_reflection = false;
+
+
+        // tir
+            // wo
+            double cos_thetai = normal.dot(ray_dir_reversed);
+            // index of refraction
+            double eta = ior;
+            if(cos_thetai < 0.0) {
+                eta = 1.0 / eta;
+            }
+            double temp = 1.0 - (1.0 - cos_thetai * cos_thetai) / (eta * eta);
+            total_internal_reflection = temp < 0.0;
+            // if(temp < 0.0) total_internal_reflection = true;
+        // end tir
+
+            if(total_internal_reflection == true) {
+
+                // cout << "TIR TRUE\n";
+                // continued from above
+                rlc_col.multiply(raytrace(reflected_ray, cur_depth + 1));
+                // rlc_col.multiply(normal_dot_light_dir);
+                col.add(rlc_col);
+            } else {
+
+                // cout << "TIR FALSE\n";
+
+                Vector wt;
+        // below is the sample_f return
+
+                Vector n = normal;
+                // wo
+                // reset this value
+                cos_thetai = n.dot(ray_dir_reversed);
+                // reset this value
+                eta = ior;
+
+                if(cos_thetai < 0.0) {
+                    cos_thetai = -cos_thetai;
+                    n = n.negative();
+                    eta = 1.0 / eta;
+                }
+                // recalculate
+                temp = 1.0 - (1.0 - cos_thetai * cos_thetai) / (eta * eta);
+                double cos_theta2 = sqrt(temp);
+
+                // dvide changes the shadow for some random reason.
+                Vector tmp1 = ray_dir_reversed.negative().divide(eta);
+                Vector tmp2 = n.multiply((cos_theta2 - cos_thetai / eta));
+                wt = tmp1.subtract(tmp2);
+
+                Colour refracted (1.0, 1.0, 1.0, 1.0);
+                // Colour refracted;
+                double ktv = 0.9;
+                double ttt = ktv / (eta * eta);
+                refracted.changeDivide(fabs(normal.dot(wt)));
+                refracted.multiply(ttt);
+        // end samplef, return colour refracted
+
+                // Vertex adjust2 = position.addVector(normal.multiply(0.001));
+                // Ray transmitted_ray(adjust2, light_dir);
+                Ray transmitted_ray(position, wt);
+
+                rlc_col.multiply(raytrace(reflected_ray, cur_depth + 1));
+                rlc_col.multiply(fabs(normal.dot(light_dir)));
+                col.add(rlc_col);
+
+                refracted.multiply(raytrace(transmitted_ray, cur_depth + 1));
+                refracted.multiply(fabs(normal.dot(wt)));
+                col.add(refracted);
+            }
+
+        // Normal n(sr.normal);
+        // float cos_thetai = n * wo;
+        // float eta = ior;    
+            
+        // if (cos_thetai < 0.0) {         // transmitted ray is outside     
+        //     cos_thetai = -cos_thetai;
+        //     n = -n;                     // reverse direction of normal
+        //     eta = 1.0 / eta;            // invert ior 
+        // }
+
+        // float temp = 1.0 - (1.0 - cos_thetai * cos_thetai) / (eta * eta);
+        // float cos_theta2 = sqrt(temp);
+        // wt = -wo / eta - (cos_theta2 - cos_thetai / eta) * n;   
+        
+        // return (kt / (eta * eta) * white / fabs(sr.normal * wt));
+
+        }
+
+// end refract
+
     } else {
         // no object hit. return background color
-        col.set(0.5, 0.5, 1.0, 1.0);
+        col.set(0.3, 0.3, 0.3, 1.0);
     }
 
     // otherwise just return col, which is black, (bg col)

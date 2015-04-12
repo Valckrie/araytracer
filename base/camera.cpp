@@ -48,6 +48,3 @@ Camera::compute_uvw(void) {
 		w = Vector(0, -1, 0);
 	}
 }
-
-
-

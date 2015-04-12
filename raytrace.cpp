@@ -19,6 +19,8 @@ using namespace std;
 #define XSIZE 640
 #define YSIZE 480
 
+const int samplesize = 16;
+
 Colour frame_buffer[YSIZE][XSIZE];
 
 float frand()
@@ -129,7 +131,7 @@ int main(int argc, const char *argv[])
     int x,y;
     // int n;
 
-    int samplesize = 16;
+
     int ss = (int)sqrt( (float)samplesize);
     Vertex samplepixel;
 
@@ -310,7 +312,7 @@ int main(int argc, const char *argv[])
     sph10->translate(3, -1, 0);
     scene->addObject(*sph10);
 
-    Instance *sph11 = new Instance(sphereGlassI);
+    Instance *sph11 = new Instance(sphereGlassT);
     // sphBrz->scale(2.5, 2.5, 2.5);
     sph11->translate(3, -1, 3);
     scene->addObject(*sph11);
@@ -368,15 +370,17 @@ int main(int argc, const char *argv[])
                 // pp.x = vp.s * (c - 0.5 * vp.hres + (q + 0.5) / n); 
                 // pp.y = vp.s * (r - 0.5 * vp.vres + (p + 0.5) / n);
 
-                    samplepixel.x = (double)x - 0.5 * XSIZE + (j + frand()) / ss;
+                    samplepixel.x = (double)x - 0.5 * XSIZE + (j + 0.5) / ss;
                     samplepixel.x = (double)(samplepixel.x / XSIZE);
-                    samplepixel.y = (double)y - 0.5 * XSIZE + (i + frand()) / ss;
+                    samplepixel.y = (double)y - 0.5 * XSIZE + (i + 0.5) / ss;
                     samplepixel.y = (double)(samplepixel.y / XSIZE);
                     
                     // samplepixel.x = ((float)x/XSIZE) - 0.5 * XSIZE + (j + 0.5) / ss;
                     // samplepixel.y = ((float)y/YSIZE) - 0.5 * YSIZE + (i + 0.5) / ss;
 
-                    // cout << "AASSx " << samplepixel.x << " AASSy " << samplepixel.y << "\n";
+                    // if( y == 0 && x == 0) 
+                    //     cout << "AASSx " << samplepixel.x << " AASSy " << samplepixel.y << "\n";
+
                     Ray ray;
                     ray.P.set(cam->eye);
                     Vector ray_dir = cam->w.add(cam->u.multiply(samplepixel.x).add(cam->v.multiply(samplepixel.y)));
@@ -390,12 +394,16 @@ int main(int argc, const char *argv[])
 
         // end aa
 
-            avg = total.divide(samplesize);
+            avg = total.returnDivide(samplesize);
             // 
             
             // Ray ray;
             // double normalized_x = (((float)x)/XSIZE)-0.5;
             // double normalized_y = (((float)y)/XSIZE)-0.5;
+
+            // if( y == 0 && x == 0) 
+            //             cout << "AASSx " << normalized_x << " AASSy " << normalized_y << "\n";
+
             // Vector ray_dir = cam->w.add(cam->u.multiply(normalized_x).add(cam->v.multiply(normalized_y)));
             // ray.P.set(cam->eye);
             // ray.D.set(ray_dir);
@@ -403,7 +411,7 @@ int main(int argc, const char *argv[])
             // avg = scene->raytrace(ray, 0);
 
             // avg.add(avg);
-            // avg = avg.divide(2);
+            // avg = avg.returnDivide(2);
 
             // Save result in frame buffer
             frame_buffer[y][x].red = avg.red;

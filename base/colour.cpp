@@ -70,10 +70,18 @@ void Colour::multiply(float scalar) {
     blue *= scalar;
 }
 
-Colour Colour::divide(float scalar) {
+Colour Colour::changeDivide(float scalar) {
     red = red / scalar;
     green = green / scalar;
     blue = blue / scalar;
+}
+
+Colour Colour::returnDivide(float scalar) {
+    Colour tmp;
+    tmp.red = red / scalar;
+    tmp.green = green / scalar;
+    tmp.blue = blue / scalar;
+    return tmp;
 }
 
 void Colour::scaleLuminance(float scalar) {
