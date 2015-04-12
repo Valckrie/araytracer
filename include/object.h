@@ -13,7 +13,7 @@
 class Object {
 	Object *obj_next;
 	public:
-	Material *obj_mat;
+	mutable Material *obj_mat;
 
 	Object(void);
 	void link(Object *obj);

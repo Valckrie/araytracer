@@ -27,9 +27,9 @@ class Instance: public Object {
 				
 		void set_object(Object* obj_ptr);	
 				
-		virtual Material* get_material(void) const;  								
+		virtual Material* getMaterial(void);  								
 				
-		virtual void set_material(Material* materialPtr);
+		virtual void setMaterial(Material* materialPtr);
 		
         //virtual		
 		bool intersect(Ray& ray, Hit *hit);

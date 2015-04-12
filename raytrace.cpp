@@ -147,7 +147,7 @@ int main(int argc, const char *argv[])
     col_white.set(1.0,1.0,1.0,1.0);
 
     Camera* cam = new Camera();
-    cam->set_eye(6, 2, 9, 1);
+    cam->set_eye(6, 2, -9, 1);
     cam->set_lookat(0, -3, 0, 1);
     // cam->set_eye(2, 1, 3, 1);
     // cam->set_lookat(-3, -3, 2, 1);
@@ -203,7 +203,8 @@ int main(int argc, const char *argv[])
     bronzeR->set_exp(25);
     Material *jadeR = new Material(3);
     Material *silverR = new Material(4);
-    Material *glass = new Material(5);
+    Material *glassI = new Material(5);
+    Material *glassT = new Material(6);
 
     Material *checkerfloor = new Material(99);
 
@@ -253,8 +254,11 @@ int main(int argc, const char *argv[])
     Sphere* sphereRefBlack = new Sphere(ellipse_c, ellipse_r);
     sphereRefBlack->setMaterial(blackR);
 
-    Sphere* sphereGlass = new Sphere(ellipse_c, ellipse_r);
-    sphereGlass->setMaterial(glass);
+    Sphere* sphereGlassI = new Sphere(ellipse_c, ellipse_r);
+    sphereGlassI->setMaterial(glassI);
+
+    Sphere* sphereGlassT = new Sphere(ellipse_c, ellipse_r);
+    sphereGlassT->setMaterial(glassT);
 
     Instance *sph01 = new Instance(sphereSpecRed);
     // sphBrz->scale(2.5, 2.5, 2.5);
@@ -306,9 +310,9 @@ int main(int argc, const char *argv[])
     sph10->translate(3, -1, 0);
     scene->addObject(*sph10);
 
-    Instance *sph11 = new Instance(sphereGlass);
+    Instance *sph11 = new Instance(sphereGlassI);
     // sphBrz->scale(2.5, 2.5, 2.5);
-    sph11->translate(0, -1, 3);
+    sph11->translate(3, -1, 3);
     scene->addObject(*sph11);
 
 // end setup scene

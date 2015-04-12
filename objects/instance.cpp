@@ -93,7 +93,7 @@ Instance::set_object(Object* obj_ptr) {
 //---------------------------------------------------------------- get_material
 																
 Material* 
-Instance::get_material(void) const {
+Instance::getMaterial(void) {
 	return (obj_mat);     
 }
 
@@ -102,8 +102,9 @@ Instance::get_material(void) const {
 // Here, obj_mat is Object::obj_mat
 
 void 
-Instance::set_material(Material* m_ptr) {
-	obj_mat = m_ptr;
+Instance::setMaterial(Material* materialPtr) {
+    cout << "\nset material";
+	obj_mat = materialPtr;
 }
 
 
@@ -135,6 +136,8 @@ Instance::intersect(Ray& ray, Hit *hit) {
 						
 		if (object_ptr->getMaterial())
 			obj_mat = object_ptr->getMaterial(); 
+
+        obj_mat = object_ptr->obj_mat;
 			
 		// if (!transform_the_texture) 
 
