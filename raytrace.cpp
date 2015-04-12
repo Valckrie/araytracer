@@ -147,8 +147,11 @@ int main(int argc, const char *argv[])
     col_white.set(1.0,1.0,1.0,1.0);
 
     Camera* cam = new Camera();
-    cam->set_eye(8, 2.5, 12, 1);
-    cam->set_lookat(0, -2.5, 0, 1);
+    cam->set_eye(6, 2, 9, 1);
+    cam->set_lookat(0, -3, 0, 1);
+    // cam->set_eye(2, 1, 3, 1);
+    // cam->set_lookat(-3, -3, 2, 1);
+    // 8 , 2.5, 12
     cam->compute_uvw();
 
     // Create and add a directional light to the scene
@@ -160,34 +163,47 @@ int main(int argc, const char *argv[])
     // POINT LIGHT
     Vertex point_light_pos (0, 10, 0, 1.0);
     PointLight *pt_light1 = new PointLight(point_light_pos, col_white);
-    pt_light1->setLumScale(1.5);
+    pt_light1->setLumScale(1.2);
     pt_light1->turn_shadows(1);
-    scene->addLight(*pt_light1);
+    // scene->addLight(*pt_light1);
 
-    Vertex point_light_pos2 (-15, 10, 0, 1.0);
+    Vertex point_light_pos2 (0, 3, 7, 1.0);
     PointLight *pt_light2 = new PointLight(point_light_pos2, col_white);
-    pt_light2->setLumScale(1.0);
+    pt_light2->setLumScale(1.2);
     pt_light2->turn_shadows(1);
-    // scene->addLight(*pt_light2);
-
+    scene->addLight(*pt_light2);
 
     // POINT LIGHT SPHERE MARKER
     float marker_radius = 0.5;
     // addSphere(scene, point_light_pos, marker_radius, 1.0, 1.0, 1.0);
     
     Material *grayMaterial = new Material();
-    Material *newMaterial = new Material(0.2, 0.8, 0.4);
-    Material *specR = new Material(0.8, 0.2, 0.2, 1.0);
-    Material *specG = new Material(0.2, 0.8, 0.2, 0.8);
-    Material *specB = new Material(0.2, 0.2, 0.8, 0.6);
-    specB->copySpecular();
-    Material *matteB = new Material(0.2, 0.2, 0.8, 0.0);
-    Material *matteG = new Material(0.2, 0.2, 0.8, 0.0);
+    Material *specR = new Material(0.9, 0.1, 0.1, 0.2, 0.8, 0.6);
+    specR->set_exp(25);
+    Material *specG = new Material(0.1, 0.9, 0.1, 0.2, 0.8, 0.6);
+    specG->set_exp(25);
+    Material *specB = new Material(0.3, 0.3, 0.7, 0.2, 0.8, 0.6);
+    specB->set_exp(25);
+    // specR->copySpecular();
+    // specG->copySpecular();
+    // specB->copySpecular();
+    Material *matteR = new Material(0.8, 0.2, 0.2, 0.2, 0.8, 0.0);
+    Material *matteG = new Material(0.2, 0.8, 0.2, 0.2, 0.8, 0.0);
+    Material *matteB = new Material(0.2, 0.2, 0.8, 0.2, 0.8, 0.0);
+
+    Material *yellowR = new Material(0.75, 0.75, 0.0, 0.25, 0.5, 0.25, 1.0);
+    yellowR->set_exp(101);
+
+    Material *blackR = new Material(0.0, 0.0, 0.0, 0.35, 0.75, 0.0, 1.0);
+    blackR->set_exp(1);
+
     Material *bronze = new Material(1);
+    bronze->set_exp(25);
     Material *bronzeR = new Material(2);
-    Material *grayR = new Material(3);
+    bronzeR->set_exp(25);
+    Material *jadeR = new Material(3);
     Material *silverR = new Material(4);
-    Material *transp = new Material(5);
+    Material *glass = new Material(5);
 
     Material *checkerfloor = new Material(99);
 
@@ -204,38 +220,96 @@ int main(int argc, const char *argv[])
     Sphere* sphereGray = new Sphere(ellipse_c, ellipse_r);
     sphereGray->setMaterial(grayMaterial);
 
-    Sphere* sphereGreen = new Sphere(ellipse_c, ellipse_r);
-    sphereGreen->setMaterial(silverR);
+    Sphere* sphereMatteGreen = new Sphere(ellipse_c, ellipse_r);
+    sphereMatteGreen->setMaterial(matteG);
 
-    Sphere* sphereRed = new Sphere(ellipse_c, ellipse_r);
-    sphereRed->setMaterial(specR);
+    Sphere* sphereMatteRed = new Sphere(ellipse_c, ellipse_r);
+    sphereMatteRed->setMaterial(matteR);
 
-    Sphere* sphereBlue = new Sphere(ellipse_c, ellipse_r);
-    sphereBlue->setMaterial(specB);
+    Sphere* sphereMatteBlue = new Sphere(ellipse_c, ellipse_r);
+    sphereMatteBlue->setMaterial(matteB);
+
+    Sphere* sphereSpecRed = new Sphere(ellipse_c, ellipse_r);
+    sphereSpecRed->setMaterial(specR);
+
+    Sphere* sphereSpecGreen = new Sphere(ellipse_c, ellipse_r);
+    sphereSpecGreen->setMaterial(specG);
+
+    Sphere* sphereSpecBlue = new Sphere(ellipse_c, ellipse_r);
+    sphereSpecBlue->setMaterial(specB);
 
     Sphere* sphereBronze = new Sphere(ellipse_c, ellipse_r);
     sphereBronze->setMaterial(bronzeR);
 
-    Sphere* sphereTransp = new Sphere(ellipse_c, ellipse_r);
-    sphereTransp->setMaterial(transp);
+    Sphere* sphereSilver = new Sphere(ellipse_c, ellipse_r);
+    sphereSilver->setMaterial(silverR);
 
-    Sphere* sphereSilv = new Sphere(ellipse_c, ellipse_r);
-    sphereSilv->setMaterial(silverR);
+    Sphere* sphereJade = new Sphere(ellipse_c, ellipse_r);
+    sphereJade->setMaterial(jadeR);
 
-    Instance *sphGra = new Instance(sphereGray);
-    // sphGra->scale(2.5, 2.5, 2.5);
-    sphGra->translate(3, -4, 0);
-    scene->addObject(*sphGra);
+    Sphere* sphereRefYellow = new Sphere(ellipse_c, ellipse_r);
+    sphereRefYellow->setMaterial(yellowR);
 
-    Instance *sphRed = new Instance(sphereRed);
-    // sphRed->scale(2.5, 2.5, 2.5);
-    sphRed->translate(-3, -4, 0);
-    scene->addObject(*sphRed);
+    Sphere* sphereRefBlack = new Sphere(ellipse_c, ellipse_r);
+    sphereRefBlack->setMaterial(blackR);
 
-    Instance *sphBrz = new Instance(sphereBronze);
+    Sphere* sphereGlass = new Sphere(ellipse_c, ellipse_r);
+    sphereGlass->setMaterial(glass);
+
+    Instance *sph01 = new Instance(sphereSpecRed);
     // sphBrz->scale(2.5, 2.5, 2.5);
-    sphBrz->translate(0, -4, 0);
-    scene->addObject(*sphBrz);
+    sph01->translate(3, -4, 3);
+    scene->addObject(*sph01);
+
+    Instance *sph02 = new Instance(sphereSpecGreen);
+    // sphBrz->scale(2.5, 2.5, 2.5);
+    sph02->translate(0, -4, 3);
+    scene->addObject(*sph02);
+
+    Instance *sph03 = new Instance(sphereSpecBlue);
+    // sphBrz->scale(2.5, 2.5, 2.5);
+    sph03->translate(-3, -4, 3);
+    scene->addObject(*sph03);
+
+    Instance *sph04 = new Instance(sphereBronze);
+    // sphGra->scale(2.5, 2.5, 2.5);
+    sph04->translate(3, -4, 0);
+    scene->addObject(*sph04);
+
+    Instance *sph05 = new Instance(sphereJade);
+    // sphBrz->scale(2.5, 2.5, 2.5);
+    sph05->translate(0, -4, 0);
+    scene->addObject(*sph05);
+
+    Instance *sph06 = new Instance(sphereSilver);
+    // sphRed->scale(2.5, 2.5, 2.5);
+    sph06->translate(-3, -4, 0);
+    scene->addObject(*sph06);
+
+    Instance *sph07 = new Instance(sphereMatteRed);
+    // sphBrz->scale(2.5, 2.5, 2.5);
+    sph07->translate(3, -4, -3);
+    scene->addObject(*sph07);
+
+    Instance *sph08 = new Instance(sphereMatteGreen);
+    // sphBrz->scale(2.5, 2.5, 2.5);
+    sph08->translate(0, -4, -3);
+    scene->addObject(*sph08);
+
+    Instance *sph09 = new Instance(sphereMatteBlue);
+    // sphBrz->scale(2.5, 2.5, 2.5);
+    sph09->translate(-3, -4, -3);
+    scene->addObject(*sph09);
+
+    Instance *sph10 = new Instance(sphereRefYellow);
+    // sphBrz->scale(2.5, 2.5, 2.5);
+    sph10->translate(3, -1, 0);
+    scene->addObject(*sph10);
+
+    Instance *sph11 = new Instance(sphereGlass);
+    // sphBrz->scale(2.5, 2.5, 2.5);
+    sph11->translate(0, -1, 3);
+    scene->addObject(*sph11);
 
 // end setup scene
 
@@ -255,26 +329,51 @@ int main(int argc, const char *argv[])
             // double sampley = (((float)y)/XSIZE) - 0.5;
             // cout << "ORIGX " << samplex << " ORIGY " << sampley << "\n";
 
+            // for(int i = 0; i < ss; i++) {           // up sample
+            //     for(int j = 0; j < ss; j++) {       // across sample
+
+            //     // pp.x = vp.s * (c - 0.5 * vp.hres + (q + 0.5) / n); 
+            //     // pp.y = vp.s * (r - 0.5 * vp.vres + (p + 0.5) / n);
+
+            //         samplepixel.x = (double)x - 0.5 * XSIZE + (j + 0.5) / ss;
+            //         samplepixel.x = (double)(samplepixel.x / XSIZE);
+            //         samplepixel.y = (double)y - 0.5 * XSIZE + (i + 0.5) / ss;
+            //         samplepixel.y = (double)(samplepixel.y / XSIZE);
+                    
+            //         // samplepixel.x = ((float)x/XSIZE) - 0.5 * XSIZE + (j + 0.5) / ss;
+            //         // samplepixel.y = ((float)y/YSIZE) - 0.5 * YSIZE + (i + 0.5) / ss;
+
+            //         // cout << "AASSx " << samplepixel.x << " AASSy " << samplepixel.y << "\n";
+            //         Ray ray;
+            //         ray.P.set(samplepixel.x, samplepixel.y, 25.0, 1.0);
+            //         Vector ray_dir (0, 0, -1);
+            //         ray.D.set(ray_dir);
+            //         // ray.D.normalise();
+
+            //         sample = scene->raytrace(ray, 0);
+            //         total.add(sample);
+            //     }
+            // }
+
+
+        // anti alias sampling
+
             for(int i = 0; i < ss; i++) {           // up sample
                 for(int j = 0; j < ss; j++) {       // across sample
 
                 // pp.x = vp.s * (c - 0.5 * vp.hres + (q + 0.5) / n); 
                 // pp.y = vp.s * (r - 0.5 * vp.vres + (p + 0.5) / n);
 
-
-
-                    samplepixel.x = (double)x - 0.5 * XSIZE + (j + 0.5) / ss;
+                    samplepixel.x = (double)x - 0.5 * XSIZE + (j + frand()) / ss;
                     samplepixel.x = (double)(samplepixel.x / XSIZE);
-                    samplepixel.y = (double)y - 0.5 * XSIZE + (i + 0.5) / ss;
+                    samplepixel.y = (double)y - 0.5 * XSIZE + (i + frand()) / ss;
                     samplepixel.y = (double)(samplepixel.y / XSIZE);
                     
                     // samplepixel.x = ((float)x/XSIZE) - 0.5 * XSIZE + (j + 0.5) / ss;
                     // samplepixel.y = ((float)y/YSIZE) - 0.5 * YSIZE + (i + 0.5) / ss;
 
                     // cout << "AASSx " << samplepixel.x << " AASSy " << samplepixel.y << "\n";
-
                     Ray ray;
-
                     ray.P.set(cam->eye);
                     Vector ray_dir = cam->w.add(cam->u.multiply(samplepixel.x).add(cam->v.multiply(samplepixel.y)));
                     ray.D.set(ray_dir);
@@ -285,17 +384,20 @@ int main(int argc, const char *argv[])
                 }
             }
 
-            avg = total.divide(samplesize);
-            // avg = total;
+        // end aa
 
+            avg = total.divide(samplesize);
+            // 
+            
             // Ray ray;
             // double normalized_x = (((float)x)/XSIZE)-0.5;
-            // double normalized_y = (((float)y)/YSIZE)-0.5;
+            // double normalized_y = (((float)y)/XSIZE)-0.5;
             // Vector ray_dir = cam->w.add(cam->u.multiply(normalized_x).add(cam->v.multiply(normalized_y)));
             // ray.P.set(cam->eye);
             // ray.D.set(ray_dir);
             // ray.D.normalise();
-            // avg = scene->raytrace(ray,6);
+            // avg = scene->raytrace(ray, 0);
+
             // avg.add(avg);
             // avg = avg.divide(2);
 
