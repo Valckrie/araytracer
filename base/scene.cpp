@@ -5,7 +5,7 @@
 #include "include/constants.h"
 using namespace std;
 
-const int MAX_DEPTH = 6 ;
+const int MAX_DEPTH = 4;
 
 Scene::Scene()
 {

@@ -1,4 +1,4 @@
-OBJS = raytrace.o base/scene.o base/vector.o base/vertex.o base/colour.o objects/object.o objects/sphere.o base/material.o base/ray.o lights/light.o lights/directional_light.o base/hit.o base/camera.o objects/plane.o base/matrix.o objects/instance.o objects/triangle.o objects/opencylinder.o lights/point_light.o
+OBJS = raytrace.o base/scene.o base/vector.o base/vertex.o base/colour.o objects/object.o objects/sphere.o base/material.o base/ray.o lights/light.o lights/directional_light.o base/hit.o base/camera.o objects/plane.o base/matrix.o objects/instance.o objects/triangle.o objects/opencylinder.o lights/point_light.o objects/disk.o
 
 raytrace: $(OBJS) 
 	g++ -o raytrace $(OBJS) -lm
@@ -6,7 +6,7 @@ raytrace: $(OBJS)
 .cpp.o:
 	g++ -c -O -I. $< -o $@
 
-raytrace.o: include/scene.h include/sphere.h include/plane.h include/directional_light.h include/spot_light.h include/camera.h include/instance.h include/triangle.h include/point_light.h
+raytrace.o: include/scene.h include/sphere.h include/plane.h include/directional_light.h include/spot_light.h include/camera.h include/instance.h include/triangle.h include/point_light.h include/disk.h
 
 base/scene.o: include/scene.h
 
@@ -35,6 +35,8 @@ objects/plane.o: include/plane.h
 objects/instance.o: include/instance.h
 
 objects/triangle.o: include/triangle.h
+
+objects/disk.o: include/disk.h
 
 objects/opencylinder.o: include/opencylinder.h
 
@@ -82,6 +84,9 @@ include/vector.h: include/matrix.h
 	
 include/plane.h: include/object.h
 	touch include/plane.h
+		
+include/disk.h: include/object.h
+	touch include/disk.h
 	
 include/triangle.h: include/object.h
 	touch include/triangle.h

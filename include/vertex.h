@@ -20,6 +20,7 @@ class Vertex {
 	Vertex addVector (Vector v);
 	double distance(Vertex &p);
 	Vertex returnMultiply(float f);
+	double d_squared(const Vertex& p);
 };
 
 Vertex operator* (const Matrix& mat, const Vertex& p);

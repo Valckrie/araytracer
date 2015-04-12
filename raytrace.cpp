@@ -13,13 +13,14 @@
 #include "include/instance.h"
 #include "include/triangle.h"
 #include "include/opencylinder.h"
+#include "include/disk.h"
 
 using namespace std;
 
 #define XSIZE 640
 #define YSIZE 480
 
-const int samplesize = 16;
+const int samplesize = 4;
 
 Colour frame_buffer[YSIZE][XSIZE];
 
@@ -220,6 +221,9 @@ int main(int argc, const char *argv[])
     Vertex ellipse_c (0, 0, 0, 1);
     float ellipse_r = 1;
 
+    Disk* disk = new Disk();
+    disk->setMaterial(matteG);
+
     Sphere* sphereGray = new Sphere(ellipse_c, ellipse_r);
     sphereGray->setMaterial(grayMaterial);
 
@@ -316,6 +320,12 @@ int main(int argc, const char *argv[])
     // sphBrz->scale(2.5, 2.5, 2.5);
     sph11->translate(3, -1, 3);
     scene->addObject(*sph11);
+
+    Instance *disk1 = new Instance(disk);
+    // disk1->scale(2.5, 2.5, 2.5);
+    disk1->translate(0, -2, 0);
+    scene->addObject(*disk1);
+
 
 // end setup scene
 
