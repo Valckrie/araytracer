@@ -160,7 +160,7 @@ int main(int argc, const char *argv[])
     cam->compute_uvw();
 
     // Create and add a directional light to the scene
-    Vector dir_light_dir(1.0, 1.0, 0.0);
+    Vector dir_light_dir(-1.0, -1.0, 0.0);
     DirectionalLight *dir_light1 = new DirectionalLight(dir_light_dir, col_white);
     dir_light1->turn_shadows(1);
     scene->addLight(*dir_light1);

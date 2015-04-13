@@ -17,7 +17,7 @@ class Triangle: public Object {
         
         bool intersect(Ray& ray, Hit *hit);                           
         
-        // virtual bool shadow_hit(const Ray& ray, double& tmin) const; 
+        bool shadow_hit(Ray& ray, double& sh); 
 };
 
 #endif
