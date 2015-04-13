@@ -29,11 +29,24 @@ void PointLight::getLightProperties(Vertex &pos, Vector *ldir, Colour *i)
 
     // the intensity is always the same (not dependent on where it's going
     i->set(intensity.getRed(),intensity.getGreen(),intensity.getBlue(),intensity.getAlpha());
-    i->scaleLuminance(lum_scale);
+
+    if(attenuation == true) {
+        Vector ld = point.subtract(pos);
+        double mag = ld.magnitude();
+        i->changeDivide(mag * mag);
+        i->scaleLuminance(lum_scale*200);
+    } else if(attenuation == false) {
+        i->scaleLuminance(lum_scale);
+    }
+    
 }
 
 void PointLight::setLumScale(float ls) {
     lum_scale = ls;
+}
+
+void PointLight::setAttenuation(bool option) {
+    attenuation = option;
 }
 
 bool PointLight::in_shadow(Ray& ray, Hit *hit) {

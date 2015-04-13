@@ -16,6 +16,7 @@ class Vector {
 	void set(double x, double y, double z);
 	void normalise(void);
 	double dot(const Vector &b);
+	double magnitude(void);
 	Vector crossProduct(Vector v);
 	Vector subtract (Vector v);
 	Vector multiply (double scalar);

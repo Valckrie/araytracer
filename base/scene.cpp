@@ -5,7 +5,7 @@
 #include "include/constants.h"
 using namespace std;
 
-const int MAX_DEPTH = 4;
+const int MAX_DEPTH = 2;
 
 Scene::Scene()
 {
@@ -340,8 +340,10 @@ Colour Scene::raytrace(Ray ray, int level) {
                 wt = tmp1.subtract(tmp2);
 
                 Colour refracted (1.0, 1.0, 1.0, 1.0);
+                // Colour refracted (0.4, 0.7, 1.0, 1.0);
                 // Colour refracted;
-                double ktv = 0.9;
+                // double ktv = 0.9;
+                double ktv = kt.red;
                 double ttt = ktv / (eta * eta);
                 refracted.changeDivide(fabs(normal.dot(wt)));
                 refracted.multiply(ttt);
@@ -382,7 +384,9 @@ Colour Scene::raytrace(Ray ray, int level) {
 
     } else {
         // no object hit. return background color
-        col.set(0.3, 0.3, 0.3, 1.0);
+        // col.set(0.3, 0.3, 0.3, 1.0);
+        col.set(0.4, 0.7, 1.0, 1.0);
+        // col.set(1.0, 1.0, 1.0, 1.0);
     }
 
     // otherwise just return col, which is black, (bg col)

@@ -11,12 +11,14 @@ class PointLight: public Light {
 	Vector direction;
     Colour intensity;
     float lum_scale;
+    bool attenuation;
 
     public:
         
         PointLight(Vertex &p, Colour &c);
         virtual void getLightProperties(Vertex &pos, Vector *ldir, Colour *i);
         void setLumScale(float ls);
+        void setAttenuation(bool option);
         bool in_shadow(Ray &ray, Hit* hit);
         Vertex getLocation();
 };

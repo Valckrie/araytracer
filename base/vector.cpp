@@ -42,6 +42,17 @@ void Vector::normalise(void)
   z = z/l;
 }
 
+double Vector::magnitude(void)
+{
+  double l;
+
+  l = x*x+y*y+z*z;
+  l = sqrt(l);
+
+return l;
+}
+
+
 double Vector::dot(const Vector &b)
 {
   return (x*b.x)+(y*b.y)+(z*b.z);

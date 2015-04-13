@@ -70,7 +70,7 @@ void Colour::multiply(float scalar) {
     blue *= scalar;
 }
 
-Colour Colour::changeDivide(float scalar) {
+void Colour::changeDivide(float scalar) {
     red = red / scalar;
     green = green / scalar;
     blue = blue / scalar;
