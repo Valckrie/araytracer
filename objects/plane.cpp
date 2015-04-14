@@ -53,7 +53,6 @@ bool Plane::intersect(Ray &ray, Hit *hit) {
 
         hit->n = normal;
         // hit->n.normalise();
-        // not sure if this hit needs to be normalised. check later for shadows?
         return true;
     }
     return(false);

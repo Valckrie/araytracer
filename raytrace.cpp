@@ -24,104 +24,48 @@ const int samplesize = 9;
 
 Colour frame_buffer[YSIZE][XSIZE];
 
-float frand()
-{
-  int x;
-  float f;
+float frand() {
+    int x;
+    float f;
 
-  x = rand();
-  f = (float)(x & 0xffff);
-  f = f/65536.0;
+    x = rand();
+    f = (float)(x & 0xffff);
+    f = f/65536.0;
 
-  return f;
+    return f;
 }
 
-void write_framebuffer()
-{
-  FILE *f;
-  f = fopen("out.ppm","w");
+void write_framebuffer() {
+    FILE *f;
+    f = fopen("out.ppm","w");
 
-  int x, y;
-  float r, g, b;
+    int x, y;
+    float r, g, b;
 
-  fprintf(f, "P3\n%d %d\n255\n", XSIZE, YSIZE);
+    fprintf(f, "P3\n%d %d\n255\n", XSIZE, YSIZE);
 
-  for(y=YSIZE-1;y>=0;y-=1)
-  {
-    for(x=0;x<XSIZE;x+=1)
-    {
-      r = 255.0 * frame_buffer[y][x].getRed();
-      g = 255.0 * frame_buffer[y][x].getGreen();
-      b = 255.0 * frame_buffer[y][x].getBlue();
-      if (r > 255.0) r = 255.0;
-      if (g > 255.0) g = 255.0;
-      if (b > 255.0) b = 255.0;
-      fprintf(f, "%d %d %d\n",(int)r, (int)g, (int)b);
+    for(y=YSIZE-1;y>=0;y-=1) {
+        for(x=0;x<XSIZE;x+=1) {
+            r = 255.0 * frame_buffer[y][x].getRed();
+            g = 255.0 * frame_buffer[y][x].getGreen();
+            b = 255.0 * frame_buffer[y][x].getBlue();
+            if (r > 255.0) r = 255.0;
+            if (g > 255.0) g = 255.0;
+            if (b > 255.0) b = 255.0;
+            fprintf(f, "%d %d %d\n",(int)r, (int)g, (int)b);
+        }
     }
-  }
-
-  fclose(f);
+    fclose(f);
 }
 
-void clear_framebuffer()
-{
-  int x,y;
+void clear_framebuffer() {
+    int x,y;
 
-  for(y=0;y<YSIZE;y+=1)
-  {
-    for(x=0;x<XSIZE;x+=1)
-    {
-      frame_buffer[y][x].clear();
+    for(y=0;y<YSIZE;y+=1) {
+        for(x=0;x<XSIZE;x+=1) {
+          frame_buffer[y][x].clear();
+        }
     }
-  }
-}
-
-
-//
-void addSphere(Scene *scene, Vertex &centre, float &rad, double R, double G, double B) {
-
-    Sphere *s;
-    Material *m;
-    Vertex p;
-    double ca, cr, cg, cb;
-
-    s = new Sphere(centre, rad);
-
-    // cout << "x " << centre.x << " y " << centre.y << " z " << centre.z << " w " << centre.w;
-    // cout << "\n";
-    // cout << s->getRad();
-    // cout << "\n";
-
-    // create new material with shared random Ka and Kd
-    m = new Material();
-
-    // cr = frand(); cg = frand(); cb = frand(); ca = frand();
-
-    // cout << "red " << cr << " green " << cg << " blue " << cb << "\n";
-
-    m->ka.red = R;
-    m->ka.green = G;
-    m->ka.blue = B;
-    m->kd.red = R;
-    m->kd.green = G;
-    m->kd.blue = B;
-    m->kr.red =  0.0;
-    m->kr.green = 0.0;
-    m->kr.blue = 0.0;
-    m->ks.red = 0.5;
-    m->ks.green =  0.5;
-    m->ks.blue = 0.5;
-    m->kt.red = 0.0;
-    m->kt.green = 0.0;
-    m->kt.blue = 0.0;
-    m->n = 400.0;
-
-    // set spheres material
-    s->setMaterial(m);
-
-    // as sphere to scene
-    scene->addObject(*s);
-
 }
 
 // The main raytacing entry point.
@@ -130,8 +74,6 @@ int main(int argc, const char *argv[])
 {
     Scene *scene;
     int x,y;
-    // int n;
-
 
     int ss = (int)sqrt( (float)samplesize);
     Vertex samplepixel;
@@ -149,42 +91,37 @@ int main(int argc, const char *argv[])
     Colour col_white;
     col_white.set(1.0,1.0,1.0,1.0);
 
+    // Create camera and set eye and look at positions
     Camera* cam = new Camera();
-    // cam->set_eye(-4, 2, 6, 1);
     cam->set_eye(-10, 5, -15, 1);
-    // cam->set_eye(6, 2, -9, 1);
     cam->set_lookat(0, -3, 0, 1);
-    // cam->set_eye(2, 1, 3, 1);
-    // cam->set_lookat(-3, -3, 2, 1);
-    // 8 , 2.5, 12
     cam->compute_uvw();
 
-    // Create and add a directional light to the scene
+    // directional light 1
     Vector dir_light_dir(-1.0, -1.0, 0.0);
     DirectionalLight *dir_light1 = new DirectionalLight(dir_light_dir, col_white);
     dir_light1->turn_shadows(1);
-    scene->addLight(*dir_light1);
+    // scene->addLight(*dir_light1);
 
-    // POINT LIGHT
-    Vertex point_light_pos (12, 6, -10, 1.0);
+    // point light 1
+    Vertex point_light_pos (8, 6, 0, 1.0);
     PointLight *pt_light1 = new PointLight(point_light_pos, col_white);
     pt_light1->setAttenuation(true);
     pt_light1->setLumScale(1.0);
     pt_light1->turn_shadows(1);
-    // scene->addLight(*pt_light1);
+    scene->addLight(*pt_light1);
 
-    Vertex point_light_pos2 (8, 6, -10, 1.0);
+    // point light 2
+    Vertex point_light_pos2 (-1, 8, -1, 1.0);
     PointLight *pt_light2 = new PointLight(point_light_pos2, col_white);
     pt_light2->setAttenuation(true);
-    pt_light2->setLumScale(1.0);
+    pt_light2->setLumScale(0.5);
     pt_light2->turn_shadows(1);
-    // scene->addLight(*pt_light2);
-
-    // POINT LIGHT SPHERE MARKER
-    float marker_radius = 0.5;
-    // addSphere(scene, point_light_pos, marker_radius, 1.0, 1.0, 1.0);
+    scene->addLight(*pt_light2);
     
+    // materials
     Material *grayMaterial = new Material();
+    // specular red, green, blue materials
     Material *specR = new Material(0.9, 0.1, 0.1, 0.2, 0.8, 0.6);
     specR->set_exp(25);
     Material *specG = new Material(0.1, 0.9, 0.1, 0.2, 0.8, 0.6);
@@ -194,17 +131,19 @@ int main(int argc, const char *argv[])
     Material *specRR = new Material(0.9, 0.1, 0.1, 0.2, 0.8, 0.3);
     specRR->set_exp(1);
 
+    // matte red, green, blue materials
     Material *matteR = new Material(0.8, 0.2, 0.2, 0.2, 0.8, 0.0);
     Material *matteG = new Material(0.2, 0.8, 0.2, 0.2, 0.8, 0.0);
     Material *matteB = new Material(0.2, 0.2, 0.8, 0.2, 0.8, 0.0);
 
-    //                                r     g     b     ka   kd   ks   kr
+    // reflective                      r     g     b     ka   kd   ks   kr
     Material *yellowR = new Material(0.75, 0.75, 0.0, 0.25, 0.5, 0.25, 1.0);
     yellowR->set_exp(101);
 
     Material *blackR = new Material(0.0, 0.0, 0.0, 0.35, 0.75, 0.0, 1.0);
     blackR->set_exp(1);
 
+    // custom set materials inside material function
     Material *bronze = new Material(1);
     bronze->set_exp(25);
     Material *bronzeR = new Material(2);
@@ -214,8 +153,12 @@ int main(int argc, const char *argv[])
     Material *glassI = new Material(5);
     Material *glassT = new Material(6);
 
+    Material *glassTransparent = new Material(6);
+    glassTransparent->set_ior(1.3);
+
     Material *checkerfloor = new Material(99);
 
+    // create ground
     Plane *ground;
     Vertex ground_point(0, -5, 0, 1);
     Vector ground_normal(0, 1, 0);
@@ -223,6 +166,7 @@ int main(int argc, const char *argv[])
     ground->setMaterial(checkerfloor);
     scene->addObject(*ground);
 
+    // triangle objects
     Triangle* triB = new Triangle();
     triB->setMaterial(matteB);
 
@@ -235,53 +179,57 @@ int main(int argc, const char *argv[])
     Triangle* triR = new Triangle();
     triR->setMaterial(specR);
 
-    Vertex ellipse_c (0, 0, 0, 1);
-    float ellipse_r = 1;
+    Vertex origin (0, 0, 0, 1);
+    float default_radius = 1;
 
+    // create unit spheres with different materials
 
-    Sphere* sphereGray = new Sphere(ellipse_c, ellipse_r);
+    Sphere* sphereGray = new Sphere(origin, default_radius);
     sphereGray->setMaterial(grayMaterial);
 
-    Sphere* sphereMatteGreen = new Sphere(ellipse_c, ellipse_r);
+    Sphere* sphereMatteGreen = new Sphere(origin, default_radius);
     sphereMatteGreen->setMaterial(matteG);
 
-    Sphere* sphereMatteRed = new Sphere(ellipse_c, ellipse_r);
+    Sphere* sphereMatteRed = new Sphere(origin, default_radius);
     sphereMatteRed->setMaterial(matteR);
 
-    Sphere* sphereMatteBlue = new Sphere(ellipse_c, ellipse_r);
+    Sphere* sphereMatteBlue = new Sphere(origin, default_radius);
     sphereMatteBlue->setMaterial(matteB);
 
-    Sphere* sphereSpecRed = new Sphere(ellipse_c, ellipse_r);
+    Sphere* sphereSpecRed = new Sphere(origin, default_radius);
     sphereSpecRed->setMaterial(specR);
 
-    Sphere* sphereSpecGreen = new Sphere(ellipse_c, ellipse_r);
+    Sphere* sphereSpecGreen = new Sphere(origin, default_radius);
     sphereSpecGreen->setMaterial(specG);
 
-    Sphere* sphereSpecBlue = new Sphere(ellipse_c, ellipse_r);
+    Sphere* sphereSpecBlue = new Sphere(origin, default_radius);
     sphereSpecBlue->setMaterial(specB);
 
-    Sphere* sphereBronze = new Sphere(ellipse_c, ellipse_r);
+    Sphere* sphereBronze = new Sphere(origin, default_radius);
     sphereBronze->setMaterial(bronzeR);
 
-    Sphere* sphereSilver = new Sphere(ellipse_c, ellipse_r);
+    Sphere* sphereSilver = new Sphere(origin, default_radius);
     sphereSilver->setMaterial(silverR);
 
-    Sphere* sphereJade = new Sphere(ellipse_c, ellipse_r);
+    Sphere* sphereJade = new Sphere(origin, default_radius);
     sphereJade->setMaterial(jadeR);
 
-    Sphere* sphereRefYellow = new Sphere(ellipse_c, ellipse_r);
+    Sphere* sphereRefYellow = new Sphere(origin, default_radius);
     sphereRefYellow->setMaterial(yellowR);
 
-    Sphere* sphereRefBlack = new Sphere(ellipse_c, ellipse_r);
+    Sphere* sphereRefBlack = new Sphere(origin, default_radius);
     sphereRefBlack->setMaterial(blackR);
 
-    Sphere* sphereGlassI = new Sphere(ellipse_c, ellipse_r);
+    Sphere* sphereGlassI = new Sphere(origin, default_radius);
     sphereGlassI->setMaterial(glassI);
 
-    Sphere* sphereGlassT = new Sphere(ellipse_c, ellipse_r);
+    Sphere* sphereGlassT = new Sphere(origin, default_radius);
     sphereGlassT->setMaterial(glassT);
 
+    Sphere* sphereGlass2 = new Sphere(origin, default_radius);
+    sphereGlass2->setMaterial(glassTransparent);
 
+    // disk and cylinder
     Disk* diskR = new Disk();
     diskR->setMaterial(bronze);
 
@@ -294,36 +242,22 @@ int main(int argc, const char *argv[])
     OpenCylinder *ocG = new OpenCylinder(0, 1, 1);
     ocG->setMaterial(specG);
 
-    Instance *oc1 = new Instance(ocR);
+    // Instance *oc1 = new Instance(ocR);
     // oc1->rotate_z(-60);
     // oc1->rotate_y(-60);
-    oc1->scale(1, 4, 1);
-    oc1->translate(0, -5, 0);
-    scene->addObject(*oc1);
+    // oc1->scale(1, 4, 1);
+    // oc1->translate(0, -5, 0);
+    // scene->addObject(*oc1);
 
-    Instance *oc2 = new Instance(ocG);
-    // oc1->rotate_z(-60);
-    // oc1->rotate_y(-60);
-    oc2->scale(1, 4, 1);
-    oc2->rotate_x(90);
-    oc2->translate(-4, -4, -2);
-    // scene->addObject(*oc2);
-
-    Instance *disk1 = new Instance(diskR);
+    // Instance *disk1 = new Instance(diskR);
     // disk1->scale(2.0, 2.0, 2.0);
-    disk1->translate(0, -1, 0);
-    scene->addObject(*disk1);
+    // disk1->translate(0, -1, 0);
+    // scene->addObject(*disk1);
 
-    Instance *disk2 = new Instance(diskG);
-    disk2->rotate_x(90);
-    // disk1->scale(2.0, 2.0, 2.0);
-    disk2->translate(-4, -4, 2);
-    // scene->addObject(*disk2);
-
-    Instance *sph01 = new Instance(sphereBronze);
+    Instance *sph01 = new Instance(sphereGlass2);
     // sphBrz->scale(2.5, 2.5, 2.5);
     sph01->translate(0, -4, 0);
-    // scene->addObject(*sph01);
+    scene->addObject(*sph01);
 
     Instance *sph02 = new Instance(sphereSpecRed);
     // sphBrz->scale(2.5, 2.5, 2.5);
@@ -334,7 +268,6 @@ int main(int argc, const char *argv[])
     // sph03->scale(0.5, 0.5, 0.5);
     sph03->translate(0, -4, -3);
     scene->addObject(*sph03);
-
 
 
     Instance *tri1 = new Instance(triG);
@@ -412,8 +345,6 @@ int main(int argc, const char *argv[])
     sph12->translate(3, -1, -3);
     // scene->addObject(*sph12);
 
-
-
 // end setup scene
 
     // RAYTRACE SCENE
@@ -428,88 +359,37 @@ int main(int argc, const char *argv[])
             Colour avg;
             Colour sample;
 
-            // double samplex = (((float)x)/XSIZE) - 0.5;
-            // double sampley = (((float)y)/XSIZE) - 0.5;
-            // cout << "ORIGX " << samplex << " ORIGY " << sampley << "\n";
-
-            // for(int i = 0; i < ss; i++) {           // up sample
-            //     for(int j = 0; j < ss; j++) {       // across sample
-
-            //     // pp.x = vp.s * (c - 0.5 * vp.hres + (q + 0.5) / n); 
-            //     // pp.y = vp.s * (r - 0.5 * vp.vres + (p + 0.5) / n);
-
-            //         samplepixel.x = (double)x - 0.5 * XSIZE + (j + 0.5) / ss;
-            //         samplepixel.x = (double)(samplepixel.x / XSIZE);
-            //         samplepixel.y = (double)y - 0.5 * XSIZE + (i + 0.5) / ss;
-            //         samplepixel.y = (double)(samplepixel.y / XSIZE);
-                    
-            //         // samplepixel.x = ((float)x/XSIZE) - 0.5 * XSIZE + (j + 0.5) / ss;
-            //         // samplepixel.y = ((float)y/YSIZE) - 0.5 * YSIZE + (i + 0.5) / ss;
-
-            //         // cout << "AASSx " << samplepixel.x << " AASSy " << samplepixel.y << "\n";
-            //         Ray ray;
-            //         ray.P.set(samplepixel.x, samplepixel.y, 25.0, 1.0);
-            //         Vector ray_dir (0, 0, -1);
-            //         ray.D.set(ray_dir);
-            //         // ray.D.normalise();
-
-            //         sample = scene->raytrace(ray, 0);
-            //         total.add(sample);
-            //     }
-            // }
-
-
         // anti alias sampling
 
             for(int i = 0; i < ss; i++) {           // up sample
                 for(int j = 0; j < ss; j++) {       // across sample
-
-                // pp.x = vp.s * (c - 0.5 * vp.hres + (q + 0.5) / n); 
-                // pp.y = vp.s * (r - 0.5 * vp.vres + (p + 0.5) / n);
 
                     samplepixel.x = (double)x - 0.5 * XSIZE + (j + 0.5) / ss;
                     samplepixel.x = (double)(samplepixel.x / XSIZE);
                     samplepixel.y = (double)y - 0.5 * XSIZE + (i + 0.5) / ss;
                     samplepixel.y = (double)(samplepixel.y / XSIZE);
                     
-                    // samplepixel.x = ((float)x/XSIZE) - 0.5 * XSIZE + (j + 0.5) / ss;
-                    // samplepixel.y = ((float)y/YSIZE) - 0.5 * YSIZE + (i + 0.5) / ss;
-
                     // if( y == 0 && x == 0) 
                     //     cout << "AASSx " << samplepixel.x << " AASSy " << samplepixel.y << "\n";
 
                     Ray ray;
-                    ray.P.set(cam->eye);
                     Vector ray_dir = cam->w.add(cam->u.multiply(samplepixel.x).add(cam->v.multiply(samplepixel.y)));
+                    ray.P.set(cam->eye);
                     ray.D.set(ray_dir);
                     ray.D.normalise();
 
+                    // trace ray with initial depth 0, primary ray
                     sample = scene->raytrace(ray, 0);
+
+                    // add the sub sample colour to the pixel total
                     total.add(sample);
                 }
             }
 
         // end aa
 
+            // average the total sum of colours in the pixel by the sample size
             avg = total.returnDivide(samplesize);
-            // 
-            
-            // Ray ray;
-            // double normalized_x = (((float)x)/XSIZE)-0.5;
-            // double normalized_y = (((float)y)/XSIZE)-0.5;
-
-            // if( y == 0 && x == 0) 
-            //             cout << "AASSx " << normalized_x << " AASSy " << normalized_y << "\n";
-
-            // Vector ray_dir = cam->w.add(cam->u.multiply(normalized_x).add(cam->v.multiply(normalized_y)));
-            // ray.P.set(cam->eye);
-            // ray.D.set(ray_dir);
-            // ray.D.normalise();
-            // avg = scene->raytrace(ray, 0);
-
-            // avg.add(avg);
-            // avg = avg.returnDivide(2);
-
             // Save result in frame buffer
             frame_buffer[y][x].red = avg.red;
             frame_buffer[y][x].green = avg.green;
@@ -518,6 +398,5 @@ int main(int argc, const char *argv[])
     }
 
     // OUTPUT IMAGE
-
     write_framebuffer();
 }

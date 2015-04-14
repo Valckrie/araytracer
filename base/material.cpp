@@ -87,6 +87,10 @@ void Material::set_exp(int e) {
     exponent = e;
 }
 
+void Material::set_ior(double iorval) {
+    ior = iorval;
+}
+
 Material::Material(int id) {
     switch(id) {
         case 1:

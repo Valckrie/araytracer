@@ -1,6 +1,6 @@
 #include "include/camera.h"
 
-// ----------------------------------------------------------------- default constructor
+// default constructor
 
 Camera::Camera() {
 	eye.x = 0;
@@ -17,7 +17,7 @@ Camera::Camera() {
 	w.set(0, 0, 1);
 }
 
-//-------------------------------------------------------------- compute_uvw
+// compute_uvw
 
 // This computes an orthornormal basis given the view point, lookat point, and up vector
 
