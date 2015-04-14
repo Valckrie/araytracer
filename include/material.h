@@ -21,6 +21,7 @@ class Material {
     Material(double R, double G, double B, double A, double D, double S, double F);
     void set_exp (int e);
     void set_ior (double iorval);
+    void set_type (int t);
     // Material(double R, double G, double B, double A, double D, double S);
     void copySpecular();
     Material(int id);

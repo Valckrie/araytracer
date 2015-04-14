@@ -20,7 +20,7 @@ using namespace std;
 #define XSIZE 640
 #define YSIZE 480
 
-const int samplesize = 9;
+const int samplesize = 16;
 
 Colour frame_buffer[YSIZE][XSIZE];
 
@@ -152,6 +152,10 @@ int main(int argc, const char *argv[])
     Material *silverR = new Material(4);
     Material *glassI = new Material(5);
     Material *glassT = new Material(6);
+    Material *emerald = new Material(7);
+    emerald->set_type(3);
+    Material *pearl = new Material(8);
+    Material *turqoise = new Material(9);
 
     Material *glassTransparent = new Material(6);
     glassTransparent->set_ior(1.3);
@@ -229,6 +233,15 @@ int main(int argc, const char *argv[])
     Sphere* sphereGlass2 = new Sphere(origin, default_radius);
     sphereGlass2->setMaterial(glassTransparent);
 
+    Sphere* sphereEmerald = new Sphere(origin, default_radius);
+    sphereEmerald->setMaterial(emerald);
+
+    Sphere* spherePearl = new Sphere(origin, default_radius);
+    spherePearl->setMaterial(pearl);
+
+    Sphere* sphereTurq = new Sphere(origin, default_radius);
+    sphereTurq->setMaterial(turqoise);
+
     // disk and cylinder
     Disk* diskR = new Disk();
     diskR->setMaterial(bronze);
@@ -254,71 +267,69 @@ int main(int argc, const char *argv[])
     // disk1->translate(0, -1, 0);
     // scene->addObject(*disk1);
 
-    Instance *sph01 = new Instance(sphereGlass2);
-    // sphBrz->scale(2.5, 2.5, 2.5);
-    sph01->translate(0, -4, 0);
-    scene->addObject(*sph01);
-
-    Instance *sph02 = new Instance(sphereSpecRed);
-    // sphBrz->scale(2.5, 2.5, 2.5);
-    sph02->translate(0, -4, 3);
-    scene->addObject(*sph02);
-
-    Instance *sph03 = new Instance(sphereJade);
-    // sph03->scale(0.5, 0.5, 0.5);
-    sph03->translate(0, -4, -3);
-    scene->addObject(*sph03);
-
-
-    Instance *tri1 = new Instance(triG);
-    tri1->scale(3.5, 3, 3.5);
-    tri1->rotate_x(15);
-    tri1->rotate_y(15);
-    tri1->rotate_z(15);
-    tri1->translate(0, 0, 0);
+    // Instance *tri1 = new Instance(triG);
+    // tri1->scale(3.5, 3, 3.5);
+    // tri1->rotate_x(15);
+    // tri1->rotate_y(15);
+    // tri1->rotate_z(15);
+    // tri1->translate(0, 0, 0);
     // scene->addObject(*tri1);
 
-    Instance *tri2 = new Instance(triB);
-    tri2->scale(5, 8, 6);
-    tri2->rotate_x(30);
-    tri2->rotate_y(15);
-    tri2->rotate_z(5);
-    tri2->translate(0, -2, 0);
+    // Instance *tri2 = new Instance(triB);
+    // tri2->scale(5, 8, 6);
+    // tri2->rotate_x(30);
+    // tri2->rotate_y(15);
+    // tri2->rotate_z(5);
+    // tri2->translate(0, -2, 0);
     // scene->addObject(*tri2);
 
-    Instance *tri3 = new Instance(triR);
-    tri3->scale(4, 6, 5);
-    tri3->rotate_x(-15);
-    tri3->rotate_y(-15);
-    tri3->rotate_z(-15);
-    tri3->translate(-3, -4, 0);
+    // Instance *tri3 = new Instance(triR);
+    // tri3->scale(4, 6, 5);
+    // tri3->rotate_x(-15);
+    // tri3->rotate_y(-15);
+    // tri3->rotate_z(-15);
+    // tri3->translate(-3, -4, 0);
     // scene->addObject(*tri3);
 
-    Instance *sph04 = new Instance(sphereSpecRed);
-    sph04->scale(1.0, 1.0, 2.0);
-    sph04->rotate_x(60);
-    sph04->rotate_y(60);
-    sph04->translate(4, -4, 0);
-    // scene->addObject(*sph04);
+    Instance *sph01 = new Instance(sphereBronze);
+    sph01->scale(1.5, 1.5, 1.5);
+    sph01->translate(0, -3.5, 0);
+    scene->addObject(*sph01);
 
-    Instance *sph05 = new Instance(sphereSpecBlue);
+    Instance *sph02 = new Instance(sphereTurq);
+    sph02->scale(2, 2, 2);
+    sph02->translate(0, -3, 4.5);
+    scene->addObject(*sph02);
+
+    Instance *sph03 = new Instance(sphereMatteBlue);
+    // sph03->scale(0.5, 0.5, 0.5);
+    sph03->translate(0, -4, -3.5);
+    scene->addObject(*sph03);
+
+    Instance *sph04 = new Instance(spherePearl);
+    sph04->scale(0.5, 0.5, 0.5);
+    // sph04->rotate_x(60);
+    // sph04->rotate_y(60);
+    sph04->translate(-4.5, -2.5, -3.5);
+    scene->addObject(*sph04);
+
+    Instance *sph05 = new Instance(sphereEmerald);
     // sph05->scale(3, 2, 1);
     // sph05->translate(4, 2, 4);
-    sph05->translate(0, -4, 0);
-    // sph05->rotate_x(40);
-    // scene->addObject(*sph05);
+    sph05->translate(-3, -4, -3.5);
+    scene->addObject(*sph05);
 
-    Instance *sph06 = new Instance(sphereSpecGreen);
-    sph06->scale(1.0, 2.0, 1.0);
-    sph06->rotate_x(60);
-    sph06->rotate_z(60);
-    sph06->translate(-4, -4, 0);
-    // scene->addObject(*sph06);
+    Instance *sph06 = new Instance(sphereJade);
+    sph06->scale(0.5, 0.5, 0.5);
+    // sph06->rotate_x(60);
+    // sph06->rotate_z(60);
+    sph06->translate(-6, -1.5, -3.5);
+    scene->addObject(*sph06);
 
-    Instance *sph07 = new Instance(sphereMatteRed);
+    Instance *sph07 = new Instance(sphereGlass2);
     // sphBrz->scale(2.5, 2.5, 2.5);
-    sph07->translate(3, -4, -3);
-    // scene->addObject(*sph07);
+    sph07->translate(-6, 0, -3);
+    scene->addObject(*sph07);
 
     Instance *sph08 = new Instance(sphereMatteGreen);
     // sphBrz->scale(2.5, 2.5, 2.5);

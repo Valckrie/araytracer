@@ -86,7 +86,9 @@ Material::Material(double R, double G, double B, double A, double D, double S, d
 void Material::set_exp(int e) {
     exponent = e;
 }
-
+void Material::set_type(int t) {
+    type = t;
+}
 void Material::set_ior(double iorval) {
     ior = iorval;
 }
@@ -220,6 +222,90 @@ Material::Material(int id) {
             n = 400.0;
             ior = 1.0;
             type = 4;
+        break;
+        case 7:
+            //              emerald
+            ka.red = 0.0215;
+            ka.green = 0.1745;
+            ka.blue = 0.0215;
+            ka.alpha = 0.55;
+
+            kd.red = 0.07568;
+            kd.green = 0.61424;
+            kd.blue = 0.07568;
+            kd.alpha = 0.55;
+
+            kr.red = 0.633;
+            kr.green = 0.727811;
+            kr.blue = 0.633;
+
+            ks.red = 0.633;
+            ks.green =  0.727811;
+            ks.blue = 0.633;
+            ks.alpha = 0.55;
+
+            kt.red = 0.0;
+            kt.green = 0.0;
+            kt.blue = 0.0;
+            n = 400.0;
+            exponent = 77;
+            type = 2;
+        break;
+        case 8:
+            //              pearl
+            ka.red = 0.25;
+            ka.green = 0.20725;
+            ka.blue = 0.20725;
+            ka.alpha = 0.922;
+
+            kd.red = 1;
+            kd.green = 0.829;
+            kd.blue = 0.829;
+            kd.alpha = 0.922;
+
+            kr.red = 0.296648;
+            kr.green = 0.296648;
+            kr.blue = 0.296648;
+
+            ks.red = 0.296648;
+            ks.green = 0.296648;
+            ks.blue = 0.296648;
+            ks.alpha = 0.922;
+
+            kt.red = 0.0;
+            kt.green = 0.0;
+            kt.blue = 0.0;
+            n = 400.0;
+            exponent = 12;
+            type = 2;
+        break;
+        case 9:
+            //              turquoise
+            ka.red = 0.1;
+            ka.green = 0.18725;
+            ka.blue = 0.1745;
+            ka.alpha = 0.8;
+
+            kd.red = 0.396;
+            kd.green = 0.74151;
+            kd.blue = 0.69102;
+            kd.alpha = 0.8;
+
+            kr.red = 0.297254;
+            kr.green = 0.30829;
+            kr.blue = 0.306678;
+
+            ks.red = 0.297254;
+            ks.green = 0.30829;
+            ks.blue = 0.306678;
+            ks.alpha = 0.8;
+
+            kt.red = 0.0;
+            kt.green = 0.0;
+            kt.blue = 0.0;
+            n = 400.0;
+            exponent = 13;
+            type = 2;
         break;
         case 99:             // checker
             ka.red = 0.1;
